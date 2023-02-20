@@ -1,5 +1,7 @@
 # AidBot
 
+A chatbot for finding volunteer help using semantic text search
+
 ## TODO
 - [ ] 1. Create simple bot
 - [ ] 2. Create Database - Postgres and connect it to Python bot
