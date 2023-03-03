@@ -28,7 +28,7 @@
  - [ ] 14. ChatGPT API can also be used to reply in more natural way or provide some advices for user request
  
  ## Sources 
- We should focus on creating some simplest working project first, and improving quality later if needed. Therefore, we start with parsing just one website and we can extend our sources later.
+ We should focus on creating some simplest working project first, and improving quality later if needed. Therefore, we start with parsing just one website and we can extend our sources later:
  - [ ] https://uahelpers.com/
  
  ## Database
