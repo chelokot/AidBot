@@ -1,6 +1,9 @@
 # AidBot
 ![A chatbot for finding volunteer help using semantic text search](./assets/aidbot.gif)
 
+
+[<img align="left" alt="Visual Studio Code" width="24px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/2048px-Telegram_logo.svg.png" /> @Aid_Ai_Bot](https://t.me/Aid_Ai_bot)
+
 ## General TODO
 - [x] 1. Create simple bot
 - [ ] 2. Fill database from parsed volunteer site (see [Sources section](#sources) for more details)
