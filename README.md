@@ -1,6 +1,5 @@
 # AidBot
-
-A chatbot for finding volunteer help using semantic text search
+![A chatbot for finding volunteer help using semantic text search](./assets/aidbot.gif)
 
 ## General TODO
 - [x] 1. Create simple bot
