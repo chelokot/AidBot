@@ -16,9 +16,9 @@ while has_more:
     full_json_str = json.loads(parsed_text.find('p').text)
     has_more = full_json_str['hasMore']
     result = full_json_str['result']
-    result_json = json.dumps(result[0])  # THIS
+    result_json = json.dumps(result[0])
     dict_json = json.loads(result_json)
-    for tag in dict_json:  # THIS
+    for tag in dict_json:
         values = dict_json[tag]
         if type(values) == list:
             tuple_values = into_tuple(values)
