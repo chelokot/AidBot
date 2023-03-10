@@ -26,4 +26,4 @@ while has_more:
                 print(tag, values)
         print()
 
-    skip_value += 9
+    skip_value += len(result)
