@@ -6,11 +6,12 @@
 
 ## General TODO
 - [x] 1. Create simple bot
-- [ ] 2. Fill database from parsed volunteer site (see [Sources section](#sources) for more details)
-- [ ] 3. Create Database - Postgres and connect it to Python bot
+- [x] 2. Create Database - Postgres and connect it to Python
+- [x] 3. Create code to fill database from parsed volunteer site (see [Sources section](#sources) for more details)
+- [x] 4. Connect pgvector extension to database and python (see [Database section](#database) for more details)
  
-- [ ] 4. Process database with OpenAI 
-- [ ] 5. Store embeddings in the database (see [Database section](#database) for more details)
+- [ ] 4. Process database with OpenAI
+- [ ] 5. Store embeddings in the database
  
  ### Bot functionality:
 - [ ] 6. Adding propositions to database
@@ -35,4 +36,13 @@
 Finding similar vectors directly by calculating cosine similarity to each element in database is pretty heavy. Moreover, getting the whole column with each query is not gonna be very efficient. For doing such "find similar" searches the *vector databases* are used usually, they provide some smart alghorithms of indexing for fast searching. 
 
 Postgres can actually work as vector database using [this project](https://github.com/pgvector/pgvector). It allows storing vector embeddings in table and using cosine similarity in queries with some fast indexing.
+
+pgvector compiled for Windows is provided in pgvector directory. *vector.dll* must be putted into **./lib** folder in PostgreSQL directory, and all *.sql* files and *vector.control* file must be putted into **./share/extension** folder in PostgreSQL directory. 
+
+Once you do it, extension can be connected to database as `CREATE EXTENSION IF NOT EXISTS vector` and then you can create column with type **vector()**, for example: `CREATE TABLE table_name (id bigserial primary key, embedding vector(1568))`. 
+
+After table is filled with some data, you can create *index* as `CREATE INDEX ON table_name USING ivfflat (embedding vector_cosine_ops)`. Indexes are used to speed up search by a lot
+
+Then you can search in your database simply by using ORDER BY: `SELECT * FROM items ORDER BY embedding <-> '[3,1,2]' LIMIT 1;`
+
  
