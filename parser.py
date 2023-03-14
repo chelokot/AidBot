@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 import json
+import database
 
 
 has_more = True
@@ -16,14 +17,19 @@ while has_more:
     result = full_json_str['result']
 
     for proposition in result:
+        values_list = []
         proposition_json = json.dumps(proposition)
         dict_json = json.loads(proposition_json)
         for tag in dict_json:
             values = dict_json[tag]
             if type(values) == list:
-                print(tag, ", ".join(values))
+                values_list.append(", ".join(values))
             else:
-                print(tag, values)
+                values_list.append(values)
         print()
-
+        if len(values_list) == 7:
+            values_list.append("null")
+        values_fixed = [value.replace("'", "") for value in values_list]
+        values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
+        database.insert_data(values_list_string)
     skip_value += len(result)
