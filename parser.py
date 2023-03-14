@@ -33,6 +33,3 @@ while has_more:
         values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
         database.insert_data(values_list_string)
     skip_value += len(result)
-
-
-
