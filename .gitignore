@@ -1,4 +1,7 @@
-config.py
+utils/config.py
 .idea
-json_made.txt
-parser_test.py
+utils/json_made.txt
+utils/parser_test.py
+.assets
+.examples
+.pgvector
