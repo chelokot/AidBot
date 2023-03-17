@@ -6,6 +6,7 @@ from utils import embedding
 
 has_more = True
 skip_value = 0
+database.add_embedding_column()
 while has_more:
     url = f'https://uahelpers.com/api/volunteers/search?location=&category=&skip={skip_value}'
     response = requests.request("GET", url)
@@ -15,8 +16,6 @@ while has_more:
 
     has_more = full_json_str['hasMore']
     result = full_json_str['result']
-
-    database.add_embedding_column()
 
     for proposition in result:
         values_list = []
