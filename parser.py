@@ -1,8 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 import json
-import database
-
+from utils import database
 
 has_more = True
 skip_value = 0
