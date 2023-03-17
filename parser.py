@@ -16,7 +16,7 @@ while has_more:
     has_more = full_json_str['hasMore']
     result = full_json_str['result']
 
-    # database.add_embedding_column()
+    database.add_embedding_column()
 
     for proposition in result:
         values_list = []
@@ -32,12 +32,8 @@ while has_more:
         if len(values_list) == 7:
             values_list.append("null")
         desc = dict_json['description']
-        # print(desc)
-        # print()
-        # print(embedding.get_embedding(desc))
         values_list.append(f"{embedding.get_embedding(desc)}")
         values_fixed = [value.replace("'", "") for value in values_list]
         values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
-        print(values_list_string)
-        # database.insert_data(values_list_string)
+        database.insert_data(values_list_string)
     skip_value += len(result)

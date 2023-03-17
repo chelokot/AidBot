@@ -12,10 +12,10 @@ def insert_data(list_of_values):
     try:
         with connection.cursor() as cursor:
             cursor.execute(f"""INSERT INTO information (id, name, description, contact, 
-            comment, location, services, user_id, date_time) VALUES (default,{list_of_values}) """)
+            comment, location, services, user_id, date_time, embedding) VALUES (default,{list_of_values}) """)
     except Exception as ex:
         print(f"""INSERT INTO information (name, description, contact, 
-                    comment, location, services, user_id, date_time) VALUES ({list_of_values}) """)
+                    comment, location, services, user_id, date_time, embedding) VALUES ({list_of_values}) """)
         print(ex)
     finally:
         cursor.close()
@@ -29,5 +29,5 @@ def add_embedding_column():
     connection.execute('CREATE EXTENSION IF NOT EXISTS vector')
 
     connection.execute('ALTER TABLE information DROP COLUMN IF EXISTS embedding')
-    connection.execute('ALTER TABLE information ADD COLUMN embedding vector(1568)')
+    connection.execute('ALTER TABLE information ADD COLUMN embedding vector(1536)')
     register_vector(connection)
