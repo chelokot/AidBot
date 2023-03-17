@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 import json
 from utils import database
+from utils import embedding
 
 has_more = True
 skip_value = 0
@@ -14,6 +15,8 @@ while has_more:
 
     has_more = full_json_str['hasMore']
     result = full_json_str['result']
+
+    # database.add_embedding_column()
 
     for proposition in result:
         values_list = []
@@ -28,7 +31,13 @@ while has_more:
         print()
         if len(values_list) == 7:
             values_list.append("null")
+        desc = dict_json['description']
+        # print(desc)
+        # print()
+        # print(embedding.get_embedding(desc))
+        values_list.append(f"{embedding.get_embedding(desc)}")
         values_fixed = [value.replace("'", "") for value in values_list]
         values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
-        database.insert_data(values_list_string)
+        print(values_list_string)
+        # database.insert_data(values_list_string)
     skip_value += len(result)
