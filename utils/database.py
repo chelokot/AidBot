@@ -11,6 +11,7 @@ def insert_data(list_of_values):
                                   password=config.password, host=config.host)
     connection.autocommit = True
     connection.set_client_encoding('UNICODE')
+
     add_embedding_column()
 
     try:
