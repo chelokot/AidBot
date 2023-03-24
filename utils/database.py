@@ -3,10 +3,9 @@ from pgvector.psycopg import register_vector
 from utils import config
 
 
-def insert_data(list_of_values):
-
+def insert_data_from_site(list_of_values):
     connection = psycopg.connect(dbname=config.dbname, user=config.user,
-                                  password=config.password, host=config.host)
+                                 password=config.password, host=config.host)
     connection.autocommit = True
 
     try:
@@ -22,12 +21,29 @@ def insert_data(list_of_values):
         connection.close()
 
 
-def add_embedding_column():
+def insert_data_from_user(list_of_user_values):
+    connection = psycopg.connect(dbname=config.dbname, user=config.user,
+                                 password=config.password, host=config.host)
+    connection.autocommit = True
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(f"""INSERT INTO user_information (id, user_text, 
+                                                user_id, embedding) VALUES (default,{list_of_user_values}) """)
+    except Exception as ex:
+        print(f"""INSERT INTO user_information (id, user_text, 
+                                                user_id, embedding) VALUES ({list_of_user_values})""")
+        print(ex)
+    finally:
+        cursor.close()
+        connection.close()
+
+
+def add_embedding_column(database_name):
     connection = psycopg.connect(dbname=config.dbname, user=config.user,
                                   password=config.password, host=config.host)
     connection.autocommit = True
     connection.execute('CREATE EXTENSION IF NOT EXISTS vector')
 
-    connection.execute('ALTER TABLE information DROP COLUMN IF EXISTS embedding')
-    connection.execute('ALTER TABLE information ADD COLUMN embedding vector(1536)')
+    connection.execute(f'ALTER TABLE {database_name} ADD COLUMN IF NOT EXISTS embedding vector(1536)')
     register_vector(connection)

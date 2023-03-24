@@ -1,8 +1,8 @@
-
 import psycopg
 
 import openai
 from utils import config
+from openai.embeddings_utils import get_embedding, cosine_similarity
 
 openai.api_key = config.api_key
 
@@ -28,6 +28,8 @@ def get_embedding(text, model="text-embedding-ada-002"):
     return embeddings_json[0]['embedding']
 
 
-list_of_desc = get_descriptions()
-# print(get_description_embedding(list_of_desc))    WORKS!!!
-# print(get_user_text_embedding("park"))            WORKS!!!
+def search(embedding, n=5):
+    connection = psycopg.connect(dbname=config.dbname, user=config.user,
+                                 password=config.password, host=config.host)
+    cursor = connection.execute(f"SELECT * FROM information ORDER BY embedding <-> '{embedding}' LIMIT {n}")
+    return [item for item in cursor]

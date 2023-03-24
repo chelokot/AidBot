@@ -3,10 +3,11 @@ from bs4 import BeautifulSoup as bs
 import json
 from utils import database
 from utils import embedding
+from utils import config
 
 has_more = True
 skip_value = 0
-database.add_embedding_column()
+database.add_embedding_column(config.site_table_name)
 while has_more:
     url = f'https://uahelpers.com/api/volunteers/search?location=&category=&skip={skip_value}'
     response = requests.request("GET", url)
@@ -34,5 +35,5 @@ while has_more:
         values_list.append(f"{embedding.get_embedding(desc)}")
         values_fixed = [value.replace("'", "") for value in values_list]
         values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
-        database.insert_data(values_list_string)
+        database.insert_data_from_site(values_list_string)
     skip_value += len(result)
