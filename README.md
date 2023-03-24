@@ -10,11 +10,11 @@
 - [x] 3. Create code to fill database from parsed volunteer site (see [Sources section](#sources) for more details)
 - [x] 4. Connect pgvector extension to database and python (see [Database section](#database) for more details)
  
-- [ ] 5. Process parsed info with OpenAI and store info together with embeddings in the database
+- [x] 5. Process parsed info with OpenAI and store info together with embeddings in the database
  
  ### Bot functionality:
 - [ ] 6. Adding propositions to database
-- [ ] 7. Search: by given text - send it to OpenAI api to get embedding and find best proposition using OpenAI embeddings from database
+- [x] 7. Search: by given text - send it to OpenAI api to get embedding and find best proposition using OpenAI embeddings from database
 - [ ] 8. Remove/edit propositions
 - [ ] 9. Getting geolocation from user and connecting it to proposition in database/to user
 - [ ] 10. Use this geolocation while searching
