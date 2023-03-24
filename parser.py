@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup as bs
 import json
 from utils import database
 from utils import embedding
-print(embedding)
 from utils import config
 
 has_more = True
