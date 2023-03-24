@@ -28,6 +28,5 @@ def get_user_text(message):
     result = formatting.format_search_result(embedding.search(user_embedding))
     bot.send_message(message.chat.id, result[:4000])
 
-database.create_user_table(config.user_table_name)
 database.add_embedding_column(config.user_table_name)
 bot.polling(none_stop=True)
