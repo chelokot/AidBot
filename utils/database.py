@@ -39,22 +39,6 @@ def insert_data_from_user(list_of_user_values):
         connection.close()
 
 
-def create_user_table(table_name):
-    connection = psycopg.connect(dbname=config.dbname, user=config.user,
-                                 password=config.password, host=config.host)
-    connection.autocommit = True
-    connection.execute('CREATE EXTENSION IF NOT EXISTS vector')
-
-    connection.execute(f"""CREATE TABLE IF NOT EXISTS {table_name} (
-                        id SERIAL PRIMARY KEY,
-                        user_text VARCHAR(1000),
-                        user_id VARCHAR(100),
-                        embedding vector(1536)
-                        )""")
-    register_vector(connection)
-    connection.close()
-
-
 def add_embedding_column(database_name):
     connection = psycopg.connect(dbname=config.dbname, user=config.user,
                                   password=config.password, host=config.host)
