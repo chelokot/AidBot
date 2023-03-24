@@ -1,0 +1,2 @@
+deep-translator==1.10.1
+pytelegrambotapi==3.6.6

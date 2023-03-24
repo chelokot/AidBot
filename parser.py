@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup as bs
 import json
 from utils import database
 from utils import embedding
+print(embedding)
 from utils import config
 
 has_more = True
@@ -31,9 +32,12 @@ while has_more:
         print()
         if len(values_list) == 7:
             values_list.append("null")
-        desc = dict_json['description']
-        values_list.append(f"{embedding.get_embedding(desc)}")
-        values_fixed = [value.replace("'", "") for value in values_list]
-        values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
-        database.insert_data_from_site(values_list_string)
+
+        emb, is_request = embedding.get_full_embedding(dict_json)
+        
+        if not is_request:
+            values_list.append(f"{emb}")
+            values_fixed = [value.replace("'", "") for value in values_list]
+            values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
+            database.insert_data_from_site(values_list_string)
     skip_value += len(result)
