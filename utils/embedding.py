@@ -54,8 +54,8 @@ def get_full_embedding(proposition):
     return emb, is_actully_request(emb, full_description)
 
 
-def search(embedding, n=5):
+def search(embedding, start = 0, amount=5):
     connection = psycopg.connect(dbname=config.dbname, user=config.user,
                                  password=config.password, host=config.host)
-    cursor = connection.execute(f"SELECT * FROM information ORDER BY embedding <-> '{embedding}' LIMIT {n}")
+    cursor = connection.execute(f"SELECT * FROM information ORDER BY embedding <-> '{embedding}' LIMIT {amount} OFFSET {start}")
     return [item for item in cursor]

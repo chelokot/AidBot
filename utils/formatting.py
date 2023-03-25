@@ -1,3 +1,5 @@
+import telebot
+
 welcome_words = {
     'ru': 'Привет',
     'en': 'Hello',
@@ -41,3 +43,23 @@ def format_search_result(result):
     proposals = sort_by_date(proposals)
     return "\n".join([format_proposal(proposal) for proposal in proposals])
 
+
+def get_next_and_previous_buttons(localization, start = 0):
+    next_text = {
+        'ru': 'Далее',
+        'en': 'Next',
+        'ua': 'Далі',
+    }[localization]
+    previous_text = {
+        'ru': 'Назад',
+        'en': 'Previous',
+        'ua': 'Назад',
+    }[localization]
+    buttons = telebot.types.InlineKeyboardMarkup()
+    if(start != 0):
+        buttons.add(telebot.types.InlineKeyboardButton(text=previous_text, callback_data='previous'),
+                    telebot.types.InlineKeyboardButton(text=next_text, callback_data='next')
+                    )
+    else:
+        buttons.add(telebot.types.InlineKeyboardButton(text=next_text, callback_data='next'))
+    return buttons
