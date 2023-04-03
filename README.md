@@ -6,8 +6,9 @@
 
  ## Description
 
-TODO: write description
-TODO: write user stories and link them here
+TODO: write description here
+
+TODO: write user stories [here](./assets/User Stories.md)
 
  ## Sources 
  We should focus on creating some simplest working project first, and improving quality later if needed. Therefore, we start with parsing just one website and we can extend our sources later:
