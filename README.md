@@ -4,29 +4,11 @@
 
 [<img align="left" alt="Visual Studio Code" width="24px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/2048px-Telegram_logo.svg.png" /> @Aid_Ai_Bot](https://t.me/Aid_Ai_bot)
 
-## General TODO
-- [x] 1. Create simple bot
-- [x] 2. Create Database - Postgres and connect it to Python
-- [x] 3. Create code to fill database from parsed volunteer site (see [Sources section](#sources) for more details)
-- [x] 4. Connect pgvector extension to database and python (see [Database section](#database) for more details)
- 
-- [x] 5. Process parsed info with OpenAI and store info together with embeddings in the database
- 
- ### Bot functionality:
-- [ ] 6. Adding propositions to database
-- [x] 7. Search: by given text - send it to OpenAI api to get embedding and find best proposition using OpenAI embeddings from database
-- [ ] 8. Remove/edit propositions
-- [ ] 9. Getting geolocation from user and connecting it to proposition in database/to user
-- [ ] 10. Use this geolocation while searching
+ ## Description
 
- #### Notifications
-- [ ] 11. Get notification from bot if some new proposition is useful for your previous search
-- [ ] 12. (Maybe) send notification to proposition author when some new aid search is related to it
+TODO: write description
+TODO: write user stories and link them here
 
- #### Possible improvements
- - [ ] 13. We can use more metadata given by website for better search (like categories) or maybe even using [ChatGPT(gpt-3.5-turbo) API](https://openai.com/blog/introducing-chatgpt-and-whisper-apis) for some decision making
- - [ ] 14. ChatGPT API can also be used to reply in more natural way or provide some advices for user request
- 
  ## Sources 
  We should focus on creating some simplest working project first, and improving quality later if needed. Therefore, we start with parsing just one website and we can extend our sources later:
  - [x] https://uahelpers.com/
