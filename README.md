@@ -6,9 +6,12 @@
 
  ## Description
 
-TODO: write description here
+With the beginning of the war, many people were left without homes, personal belongings or documents.
+Such people are in dire need of quick search of help from volunteers, and volunteers need to look for victims and people who can provide them with the necessary resources.
 
-TODO: write user stories [here](./assets/UserStories.md)
+Our project is a **Telegram bot with semantic text search**, that uses AI embedding technology from OpenAI. With our bot you can quickly get data about people or organizations that can help in the specified situation. By entering a request, the user will receive a list of information about things or services that can be provided, contacts and geolocation. Charitable foundations can also use the bot to find those in need of help, find resources, or use additional analysis tools.
+
+[User stories can be found here](./assets/UserStories.md)
 
  ## Sources 
  We should focus on creating some simplest working project first, and improving quality later if needed. Therefore, we start with parsing just one website and we can extend our sources later:
