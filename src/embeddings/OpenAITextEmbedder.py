@@ -6,3 +6,27 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+from TextEmbedder import TextEmbedder
+from typing import List, Generic, TypeVar
+from Embedding import Embedding
+from EmbeddingAda1536 import EmbeddingAda1536
+import openai
+from deep_translator import GoogleTranslator
+
+EmbedType = TypeVar('EmbedType', bound=Embedding)
+
+class OpenAITextEmbedder(TextEmbedder, Generic[EmbedType]):
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+
+    def get_embedding(self, text: str, translate: bool = True) -> EmbedType:
+        # we want behaviour to depend on the type of the embedding:
+        if isinstance(self, EmbeddingAda1536):
+            text = text.replace("\n", " ")
+            if translate:
+                text = GoogleTranslator(source='auto', target='en').translate(text)
+            embeddings_json = openai.Embedding.create(input=[text], model = "text-embedding-ada-002")
+            return EmbedType(embeddings_json[0]['embedding'])
+        else:
+            raise NotImplementedError(f"Embedding type {type(self)} is not supported with OpenAI API") 
