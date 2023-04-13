@@ -9,7 +9,7 @@
 
 from TextEmbedder import TextEmbedder
 from typing import Tuple, Generic, TypeVar
-from Embedding import Embedding
+from embeddings.Embedding import Embedding
 import functools
 from openai.embeddings_utils import cosine_similarity
 

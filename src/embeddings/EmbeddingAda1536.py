@@ -8,7 +8,7 @@
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import List
-from Embedding import Embedding
+from embeddings.Embedding import Embedding
 
 class EmbeddingAda1536(Embedding):
     def __init__(self, list: List[float]):
