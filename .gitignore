@@ -1,7 +1,2 @@
-utils/config.py
+src/config.py
 .idea
-utils/json_made.txt
-utils/parser_test.py
-.assets
-.examples
-.pgvector
