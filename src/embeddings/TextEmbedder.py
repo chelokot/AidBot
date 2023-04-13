@@ -9,7 +9,7 @@
 
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Generic
-from Embedding import Embedding
+from embeddings.Embedding import Embedding
 
 T = TypeVar('T', bound=Embedding)
 
