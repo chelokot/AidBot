@@ -24,7 +24,7 @@ UAHELPERS_PROPOSAL_LOCATION    = "location"
 UAHELPERS_PROPOSAL_SERVICES    = "services"
 UAHELPERS_PROPOSAL_DATE_TIME   = "date_time"
 
-class UahelpersProposal(Generic[EmbedType], ProposalRequest):
+class UahelpersProposal(ProposalRequest[EmbedType]):
     def __init__(self,
                  characteristics: Dict[str, str],
                  embedder: TextEmbedder[EmbedType],

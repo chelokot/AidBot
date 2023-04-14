@@ -18,7 +18,7 @@ from deep_translator import GoogleTranslator
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 
-class OpenAITextEmbedder(TextEmbedder, Generic[EmbedType]):
+class OpenAITextEmbedder(TextEmbedder[EmbedType]):
     def __init__(self, api_key: str):
         self.api_key = api_key
 

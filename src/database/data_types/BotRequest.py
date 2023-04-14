@@ -17,7 +17,7 @@ EmbedType = TypeVar('EmbedType', bound=Embedding)
 
 BOT_REQUEST_MESSAGE_TEXT = "message_text"
 
-class BotRequest(Generic[EmbedType], ProposalRequest):
+class BotRequest(ProposalRequest[EmbedType]):
     def __init__(self,
                  characteristics: Dict[str, str],
                  embedder: TextEmbedder[EmbedType],

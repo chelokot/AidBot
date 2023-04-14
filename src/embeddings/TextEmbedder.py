@@ -14,7 +14,7 @@ from src.embeddings.Embedding import Embedding
 
 T = TypeVar('T', bound=Embedding)
 
-class TextEmbedder(ABC, Generic[T]):
+class TextEmbedder(Generic[T], ABC):
     @abstractmethod
     def __init__(self):
         pass
