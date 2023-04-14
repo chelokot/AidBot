@@ -8,9 +8,10 @@
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Generic, TypeVar, Dict, Optional
-from embeddings.Embedding import Embedding
-from embeddings.TextEmbedder import TextEmbedder
 from abc import ABC, abstractmethod, abstractproperty
+
+from src.embeddings.Embedding import Embedding
+from src.embeddings.TextEmbedder import TextEmbedder
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 

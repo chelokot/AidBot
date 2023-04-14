@@ -8,11 +8,11 @@
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from database.data_types import ProposalRequest
-from typing import List, Dict, Generic, TypeVar, Optional, Tuple
+from typing import Dict, Generic, TypeVar, Optional
 
-from embeddings.Embedding    import Embedding
-from embeddings.TextEmbedder import TextEmbedder
-from bot.TelegramBotUtils    import TelegramBotUtils
+from src.embeddings.Embedding    import Embedding
+from src.embeddings.TextEmbedder import TextEmbedder
+from src.bot.TelegramBotUtils    import TelegramBotUtils
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 
