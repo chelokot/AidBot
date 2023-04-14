@@ -20,13 +20,16 @@ class OpenAITextEmbedder(TextEmbedder, Generic[EmbedType]):
     def __init__(self, api_key: str):
         self.api_key = api_key
 
+    def _get_embedding_type(self):
+        return self.__orig_class__.__args__[0]
+
     def get_embedding(self, text: str, translate: bool = True) -> EmbedType:
-        # we want behaviour to depend on the type of the embedding:
-        if isinstance(self, EmbeddingAda1536):
+        embedding_type = self._get_embedding_type()
+        if embedding_type == EmbeddingAda1536:
             text = text.replace("\n", " ")
             if translate:
                 text = GoogleTranslator(source='auto', target='en').translate(text)
             embeddings_json = openai.Embedding.create(input=[text], model = "text-embedding-ada-002")
-            return EmbedType(embeddings_json[0]['embedding'])
+            return EmbeddingAda1536(embeddings_json[0]['embedding'])
         else:
-            raise NotImplementedError(f"Embedding type {type(self)} is not supported with OpenAI API") 
+            raise NotImplementedError(f"Embedding type {embedding_type} is not supported with OpenAI API") 
