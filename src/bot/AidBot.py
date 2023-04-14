@@ -12,11 +12,12 @@
 
 import telebot
 from src.database.ProposalsTable import ProposalsTable
+from src.database.BotRequestsTable import BotRequestsTable
 from src.bot.TelegramBotUtils import TelegramBotUtils
 
 
 class AidBot:
-    __proporsals_table = ProporsalsTable()
+    __proporsals_table = ProposalsTable()
     __bot_requests_table = BotRequestsTable()
     __telebot = None
 
@@ -33,6 +34,9 @@ class AidBot:
                 welcome_message = f'{TelegramBotUtils.get_welcome_message_text(localization)}, <b>{message.from_user.first_name} {message.from_user.last_name}</b>'
                 welcome_message_line2 = f'{TelegramBotUtils.get_explanation_message_text(localization)}'
                 self.bot.send_message(message.chat.id, welcome_message + '\n' + welcome_message_line2, parse_mode='html')
+
+    def start(self):
+        self.bot.polling()
 
     @staticmethod
     def get_instance(token):

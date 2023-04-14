@@ -27,7 +27,7 @@ while True:
         break
 
 from src.bot.AidBot import AidBot
-from src.config import bot_token
+from src.config.BotConfig import bot_token
 
 aidbot = AidBot.get_instance(bot_token)
 aidbot.start()
