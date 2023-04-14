@@ -7,16 +7,18 @@
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-from embeddings.TextEmbedder import TextEmbedder
-from typing import List, Generic, TypeVar
-from embeddings.Embedding import Embedding
-from embeddings.EmbeddingAda1536 import EmbeddingAda1536
+from typing import Generic, TypeVar
+
+from src.embeddings.TextEmbedder import TextEmbedder
+from src.embeddings.Embedding import Embedding
+from src.embeddings.EmbeddingAda1536 import EmbeddingAda1536
+
 import openai
 from deep_translator import GoogleTranslator
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 
-class OpenAITextEmbedder(TextEmbedder, Generic[EmbedType]):
+class OpenAITextEmbedder(TextEmbedder[EmbedType]):
     def __init__(self, api_key: str):
         self.api_key = api_key
 

@@ -7,16 +7,17 @@
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-from database.data_types import ProposalRequest
-from typing import List, Dict, Generic, TypeVar, Optional, Tuple
-from embeddings.Embedding import Embedding
-from embeddings.TextEmbedder import TextEmbedder
+from typing import Dict, Generic, TypeVar, Optional, Tuple
+
+from src.embeddings.Embedding import Embedding
+from src.embeddings.TextEmbedder import TextEmbedder
+from src.database.data_types import ProposalRequest
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 
 BOT_REQUEST_MESSAGE_TEXT = "message_text"
 
-class BotRequest(Generic[EmbedType], ProposalRequest):
+class BotRequest(ProposalRequest[EmbedType]):
     def __init__(self,
                  characteristics: Dict[str, str],
                  embedder: TextEmbedder[EmbedType],

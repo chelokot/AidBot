@@ -8,12 +8,13 @@
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Generic
-from embeddings.Embedding import Embedding
+from typing import TypeVar, Generic
+
+from src.embeddings.Embedding import Embedding
 
 T = TypeVar('T', bound=Embedding)
 
-class TextEmbedder(ABC, Generic[T]):
+class TextEmbedder(Generic[T], ABC):
     @abstractmethod
     def __init__(self):
         pass
