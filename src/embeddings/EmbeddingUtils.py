@@ -7,23 +7,19 @@
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+from TextEmbedder import TextEmbedder
 from typing import Tuple, Generic, TypeVar
-import functools
-
-from src.embeddings.TextEmbedder import TextEmbedder
 from src.embeddings.Embedding import Embedding
-
+import functools
 from openai.embeddings_utils import cosine_similarity
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 
-class EmbeddingUtils(Generic[EmbedType]):
-    @staticmethod
+class EmbeddingUtils:
     def check_is_request(model: TextEmbedder[EmbedType], embedding: EmbedType) -> bool:
         request_embedding, proposal_embedding = EmbeddingUtils._get_default_request_and_proposal_embeddings(model)
         return 0.975*cosine_similarity(embedding, request_embedding) > cosine_similarity(embedding, proposal_embedding)
     
-    @staticmethod
     @functools.lru_cache(maxsize=128)
     def _get_default_request_and_proposal_embeddings(model: TextEmbedder[EmbedType]) -> Tuple[EmbedType, EmbedType]:
         request_template = "I need help, please help me with this problem I have, I need your help. Will take will buy will receive. I don't have I need I want I HAVE PROBLEM I'm disabled I'm looking for I HAVE NOTHING THIS IS SO BAD I'm starving and I'm sick my parent need medicals"
