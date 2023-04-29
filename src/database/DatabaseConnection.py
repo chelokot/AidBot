@@ -12,6 +12,7 @@
 
 import psycopg
 from src.database.DatabaseConfig import dbname, user, password, host
+from pgvector.psycopg import register_vector
 
 
 class DatabaseConnection:
