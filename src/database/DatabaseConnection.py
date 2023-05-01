@@ -12,6 +12,7 @@
 
 import psycopg
 from src.database.DatabaseConfig import dbname, user, password, host
+from pgvector.psycopg import register_vector
 
 
 class DatabaseConnection:
@@ -29,7 +30,7 @@ class DatabaseConnection:
         else:
             self.conn = psycopg.connect(
                 host=host,
-                database=dbname,
+                dbname=dbname,
                 user=user,
                 password=password
             )
