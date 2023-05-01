@@ -35,6 +35,11 @@ class AidBot:
                 welcome_message_line2 = f'{TelegramBotUtils.get_explanation_message_text(localization)}'
                 self.bot.send_message(message.chat.id, welcome_message + '\n' + welcome_message_line2, parse_mode='html')
 
+            @self.bot.message_handler(content_types=['text'])
+            def get_user_text(message):
+                pass
+
+
     def start(self):
         self.bot.polling()
 

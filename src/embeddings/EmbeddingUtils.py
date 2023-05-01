@@ -10,7 +10,7 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from TextEmbedder import TextEmbedder
+from src.embeddings.TextEmbedder import TextEmbedder
 from typing import Tuple, Generic, TypeVar
 from src.embeddings.Embedding import Embedding
 import functools

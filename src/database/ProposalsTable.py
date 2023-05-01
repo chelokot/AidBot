@@ -12,14 +12,14 @@
 # see <https://www.gnu.org/licenses/>.
 
 from src.database.DatabaseConnection import DatabaseConnection
-from DatabaseConfig import site_table_name
+from src.database.DatabaseConfig import site_table_name
 from pgvector.psycopg import register_vector
 
 
 class ProposalsTable:
     __conn = DatabaseConnection()
 
-    def __int__(self):
+    def __init__(self):
         self.connection = self.__conn.get_instance()
 
     def insert_data_from_site(self, list_of_values):

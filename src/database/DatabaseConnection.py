@@ -30,7 +30,7 @@ class DatabaseConnection:
         else:
             self.conn = psycopg.connect(
                 host=host,
-                database=dbname,
+                dbname=dbname,
                 user=user,
                 password=password
             )

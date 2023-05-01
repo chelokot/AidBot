@@ -10,3 +10,7 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
+from src.parser_dir.UahelpersManager import UahelpersManager
+from src.database.DatabaseConfig import dbname
+
+manager = UahelpersManager(dbname)
