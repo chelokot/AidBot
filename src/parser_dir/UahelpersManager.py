@@ -16,68 +16,57 @@ import json
 from src.database.ProposalsTable import ProposalsTable
 from src.embeddings.EmbeddingUtils import EmbeddingUtils
 from src.embeddings.OpenAITextEmbedder import OpenAITextEmbedder
-from src.config.BotConfig import api_key
+
+from src.database.data_types.UahelpersProposal import UahelpersProposal
+
+from src.database.data_types.ColumnNames import ColumnNames
 
 
 class UahelpersManager:
-    __has_more = True
-    __skip_value = 0
-
-    @staticmethod
-    def __get_list_from_tag(dict_json, values_list):
-        for tag in dict_json:
-            values = dict_json[tag]
-            if type(values) == list:
-                values_list.append(", ".join(values))
-            else:
-                values_list.append(values)
-        return values_list
-
-    @staticmethod
-    def __full_description(dict_json):
-        desc = dict_json['description']
-        name = dict_json['name']
-        location = dict_json['location']  # For now, I add it to embedding, but we should handle it smarter -- compare with user location when possible
-        categories = ", ".join(dict_json['services'])
-        full_description = name + ' ' + desc + ' ' + categories + ' ' + location
-        return full_description
-
-    def __check_and_insert_data(self, is_request, values_list, emb):
-        if not is_request:
-            values_list.append(f"{emb}")
-            values_fixed = [value.replace("'", "") for value in values_list]
-            values_list_string = ", ".join([f"'{value}'" for value in values_fixed])
-            self.db.insert_data_from_site(values_list_string)
-
-    def __init__(self, dbname):
+    def __init__(self, table_name, openai_api_key, embedding_type):
         self.db = ProposalsTable()
-        self.db.add_embedding_column(dbname)
-        self.ai = OpenAITextEmbedder(api_key)
+        self.db.create_table_or_add_columns(table_name)
+        self.embedding_type = embedding_type
+        self.ai = OpenAITextEmbedder[embedding_type](openai_api_key)
+    
+    def parse(self):
+        has_more = True
+        skip_value = 0
 
-        while self.__has_more:
-            url = f'https://uahelpers.com/api/volunteers/search?location=&category=&skip={self.__skip_value}'
+        while has_more:
+            url = f'https://uahelpers.com/api/volunteers/search?location=&category=&skip={skip_value}'
             response = requests.request("GET", url)
 
             parsed_text = bs(response.text, 'lxml')
             full_json_str = json.loads(parsed_text.find('p').text)
 
-            self.__has_more = full_json_str['hasMore']
+            has_more = full_json_str['hasMore']
             result = full_json_str['result']
 
             for proposition in result:
-                values_list = []
-                proposition_json = json.dumps(proposition)
-                dict_json = json.loads(proposition_json)
+                try:
+                    proposition_json = json.dumps(proposition)
+                    dict_json = json.loads(proposition_json)
 
-                values_list = self.__get_list_from_tag(dict_json, values_list)
+                    proposal = UahelpersProposal[self.embedding_type](
+                        characteristics={
+                            ColumnNames.proposal_name:          dict_json['name'],
+                            ColumnNames.proposal_description:   dict_json['description'],
+                            ColumnNames.proposal_contact:       dict_json['contact'],
+                            ColumnNames.proposal_comment:       dict_json['comment'],
+                            ColumnNames.proposal_location: ', '.join(dict_json['location']),
+                            ColumnNames.proposal_services: ', '.join(dict_json['services']),
+                            ColumnNames.proposal_date_time:     dict_json['date'],
+                        },
+                        embedder=self.ai,
+                    )
 
-                full_desc = self.__full_description(dict_json)
-
-                emb = self.ai.get_embedding(full_desc, True)
-                is_request = EmbeddingUtils.check_is_request(full_desc, emb)
-
-                self.__check_and_insert_data(is_request, values_list, emb)
-            self.__skip_value += len(result)
+                    if not EmbeddingUtils.check_is_request(self.ai, proposal.embedding):
+                        self.db.add(proposal)
+                except Exception as e:
+                    print(e)
+                    continue
+            skip_value += len(result)
 
 
 

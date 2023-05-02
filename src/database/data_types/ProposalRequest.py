@@ -13,7 +13,7 @@
 from typing import Generic, TypeVar, Dict, Optional
 from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 
@@ -32,9 +32,12 @@ class ProposalRequest(Generic[EmbedType], ABC):
         pass
 
     @abstractmethod
-    def get_pretty_text(self) -> str:
+    def get_pretty_text(self, localization: str) -> str:
         pass
 
-    @property @ abstractproperty
+    @property
+    @abstractmethod
     def embedding(self) -> EmbedType:
         pass
+
+

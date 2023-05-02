@@ -11,15 +11,14 @@
 # see <https://www.gnu.org/licenses/>.
 
 import psycopg
-from src.database.DatabaseConfig import dbname, user, password, host
-from pgvector.psycopg import register_vector
+from src.config.DatabaseConfig import dbname, user, password, host
 
 
 class DatabaseConnection:
     __instance = None
 
     @staticmethod
-    def get_instance():
+    def get_instance() -> 'DatabaseConnection':
         if DatabaseConnection.__instance is None:
             DatabaseConnection()
         return DatabaseConnection.__instance
@@ -34,6 +33,7 @@ class DatabaseConnection:
                 user=user,
                 password=password
             )
+            self.conn.autocommit = True
             DatabaseConnection.__instance = self
 
     def execute_query(self, query):

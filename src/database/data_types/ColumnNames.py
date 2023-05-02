@@ -10,17 +10,30 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from typing import List
-from src.embeddings.Embedding import Embedding
 
+class ColumnNames:
+    id                   = "id"
 
-class EmbeddingAda1536(Embedding):
-    def __init__(self, list: List[float]):
-        if len(list) != 1536:
-            raise ValueError("EmbeddingAda1536 must be 1536-dimensional")
-        if type(list[0]) != float:
-            raise ValueError("EmbeddingAda1536 must be float")
-        self.list = list
+    proposal_name        = "name"
+    proposal_description = "description"
+    proposal_contact     = "contact"
+    proposal_comment     = "comment"
+    proposal_location    = "location"
+    proposal_services    = "services"
+    proposal_date_time   = "date_time"
+    proposal_embedding   = "embedding"
 
-    def get_list(self) -> List[float]:
-        return self.list
+    proposal_string_columns_names = [
+        proposal_name, proposal_description, proposal_contact, proposal_comment, proposal_location,
+        proposal_services, proposal_date_time
+    ]
+
+    length = {
+        proposal_name: 300,
+        proposal_description: 2000,
+        proposal_contact: 300,
+        proposal_comment: 2000,
+        proposal_location: 300,
+        proposal_services: 2000,
+        proposal_date_time: 300,
+    }

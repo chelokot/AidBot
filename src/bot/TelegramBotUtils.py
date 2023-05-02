@@ -6,6 +6,13 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+import telebot
+from typing import List
+from src.database.data_types.ProposalRequest import ProposalRequest
+import datetime
+
+
 class TelegramBotUtils:
     __welcome_words = {
         'ru': 'Привет',
@@ -14,9 +21,15 @@ class TelegramBotUtils:
     }
 
     __explanation = {
-        'ru': 'Постарайтесь описать свою проблему максимально чётко, используя 10-20 слов. Попытайтесь описать какую конкретно помощь вы ищете(какие специалисты могут вам помочь, какая услуга или вещи вам нужны). Наш алгоритм автоматически предложит вам подходящих волонтеров и их контакты',
-        'en': 'Try to describe your problem as clearly as possible using 10-20 words. Try to describe what kind of help you are looking for (which specialists can help you, what kind of service or things you need). Our algorithm will automatically suggest you suitable volunteers and their contacts',
-        'ua': 'Спробуйте ясно описати свою проблему використовуючи 10-20 слів. Спробуйте описати яку саме допомогу ви шукаєте(які спеціалісти можуть вам допомогти, яка послуга або речі вам потрібні). Наш алгоритм автоматично запропонує вам підходящих волонтерів та їх контакти',
+        'ru': 'Постарайтесь описать свою проблему максимально чётко, используя 10-20 слов. Попытайтесь описать какую '
+              'конкретно помощь вы ищете(какие специалисты могут вам помочь, какая услуга или вещи вам нужны). Наш '
+              'алгоритм автоматически предложит вам подходящих волонтеров и их контакты',
+        'en': 'Try to describe your problem as clearly as possible using 10-20 words. Try to describe what kind of '
+              'help you are looking for (which specialists can help you, what kind of service or things you need). '
+              'Our algorithm will automatically suggest you suitable volunteers and their contacts',
+        'ua': 'Спробуйте ясно описати свою проблему використовуючи 10-20 слів. Спробуйте описати яку саме допомогу ви '
+              'шукаєте(які спеціалісти можуть вам допомогти, яка послуга або речі вам потрібні). Наш алгоритм '
+              'автоматично запропонує вам підходящих волонтерів та їх контакти',
     }
 
     __received = {
@@ -26,15 +39,19 @@ class TelegramBotUtils:
     }
 
     @staticmethod
-    def get_welcome_message_text(localization):
+    def get_welcome_message_text(localization: str) -> str:
         return TelegramBotUtils.__welcome_words[localization]
 
     @staticmethod
-    def get_explanation_message_text(localization):
+    def get_explanation_message_text(localization: str) -> str:
         return TelegramBotUtils.__explanation[localization]
 
     @staticmethod
-    def get_next_and_previous_buttons(localization, start, instance):
+    def get_received_message_text(localization: str) -> str:
+        return TelegramBotUtils.__received[localization]
+
+    @staticmethod
+    def get_next_and_previous_buttons(localization: str, start: int):
         next_text = {
             'ru': 'Далее',
             'en': 'Next',
@@ -45,20 +62,22 @@ class TelegramBotUtils:
             'en': 'Previous',
             'ua': 'Назад',
         }[localization]
-        buttons = instance.telebot.types.InlineKeyboardMarkup()
+        buttons = telebot.types.InlineKeyboardMarkup()
         if start != 0:
-            buttons.add(instance.telebot.types.InlineKeyboardButton(text=previous_text, callback_data='previous'),
-                        instance.telebot.types.InlineKeyboardButton(text=next_text, callback_data='next'))
+            buttons.add(telebot.types.InlineKeyboardButton(text=previous_text, callback_data='previous'),
+                        telebot.types.InlineKeyboardButton(text=next_text, callback_data='next'))
         else:
-            buttons.add(instance.telebot.types.InlineKeyboardButton(text=next_text, callback_data='next'))
+            buttons.add(telebot.types.InlineKeyboardButton(text=next_text, callback_data='next'))
         return buttons
 
     @staticmethod
-    def format_proposal_results(proposals, localization):
+    def format_proposal_results(proposals: List[ProposalRequest], localization: str) -> str:
         return '\n\n'.join([proposal.get_pretty_text(localization) for proposal in proposals])
 
     @staticmethod
-    def date_time_to_pretty_text(date_time, localization):
+    def date_time_to_pretty_text(date_time: str, localization: str) -> str:
+        original_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
+        date_time = datetime.datetime.strptime(date_time, original_date_format) # type: datetime.datetime
         date_format = '%d-%m-%Y'
         if localization == 'ru':
             return f'Дата: {date_time.strftime(date_format)}'
@@ -68,4 +87,3 @@ class TelegramBotUtils:
             return f'Дата {date_time.strftime(date_format)}'
         else:
             return f'{date_time.strftime(date_format)}'
-

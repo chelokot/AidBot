@@ -14,7 +14,7 @@ from typing import Dict, Generic, TypeVar, Optional, Tuple
 
 from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
-from src.database.data_types import ProposalRequest
+from src.database.data_types.ProposalRequest import ProposalRequest
 
 EmbedType = TypeVar('EmbedType', bound=Embedding)
 
@@ -25,7 +25,7 @@ class BotRequest(ProposalRequest[EmbedType]):
     def __init__(self,
                  characteristics: Dict[str, str],
                  embedder: TextEmbedder[EmbedType],
-                 answer_message_id: int,
+                 answer_message_id: Optional[int],
                  start: int,
                  amount: int,
                  ):
@@ -51,5 +51,9 @@ class BotRequest(ProposalRequest[EmbedType]):
     def get_start_and_amount(self) -> Tuple[int, int]:
         return self._start, self._amount
 
-    def get_answer_message_id(self) -> int:
+    def get_answer_message_id(self) -> Optional[int]:
         return self._answer_message_id
+
+    @property
+    def embedding(self) -> EmbedType:
+        return self._embedding
