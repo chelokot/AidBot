@@ -25,7 +25,7 @@ from src.database.data_types.BotRequest import BOT_REQUEST_MESSAGE_TEXT
 class AidBot:
     __proposals_table = ProposalsTable()
     __bot_requests_table = BotRequestsTable()
-    __openai_text_embedder = OpenAITextEmbedder[EmbeddingAda1536](openai_api_key)
+    __openai_text_embedder = OpenAITextEmbedder(openai_api_key, EmbeddingAda1536)
     __telebot = None
 
     def __init__(self, token):

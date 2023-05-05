@@ -10,21 +10,19 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from typing import Dict, Generic, TypeVar, Optional, Tuple
+from typing import Dict, Optional, Tuple
 
 from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
 from src.database.data_types.ProposalRequest import ProposalRequest
 
-EmbedType = TypeVar('EmbedType', bound=Embedding)
-
 BOT_REQUEST_MESSAGE_TEXT = "message_text"
 
 
-class BotRequest(ProposalRequest[EmbedType]):
+class BotRequest(ProposalRequest):
     def __init__(self,
                  characteristics: Dict[str, str],
-                 embedder: TextEmbedder[EmbedType],
+                 embedder: TextEmbedder,
                  answer_message_id: Optional[int],
                  start: int,
                  amount: int,
@@ -55,5 +53,5 @@ class BotRequest(ProposalRequest[EmbedType]):
         return self._answer_message_id
 
     @property
-    def embedding(self) -> EmbedType:
+    def embedding(self) -> Embedding:
         return self._embedding

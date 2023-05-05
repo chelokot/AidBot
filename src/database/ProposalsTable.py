@@ -15,8 +15,7 @@ from src.database.DatabaseConnection import DatabaseConnection
 from src.config.DatabaseConfig import site_table_name
 from pgvector.psycopg import register_vector
 
-from typing import Generic, TypeVar, List
-from src.embeddings.Embedding import Embedding
+from typing import List
 from src.database.data_types.ProposalRequest import ProposalRequest
 from src.database.data_types.UahelpersProposal import UahelpersProposal
 from src.database.data_types.ColumnNames import ColumnNames
@@ -25,16 +24,14 @@ from src.database.utils.ProposalsTableUtils import ProposalsTableUtils
 
 import psycopg
 
-EmbedType = TypeVar('EmbedType', bound=Embedding)
 
-
-class ProposalsTable(Generic[EmbedType], ProposalsTableUtils):
+class ProposalsTable(ProposalsTableUtils):
     __conn = DatabaseConnection()
 
     def __init__(self):
         self.connection = self.__conn.get_instance().conn  # type: psycopg.connection.Connection
 
-    def add(self, proposal: ProposalRequest[EmbedType]):
+    def add(self, proposal: ProposalRequest):
         cursor = self.connection.cursor()
         query  = self._get_insert_query(proposal)
         try:
@@ -66,7 +63,7 @@ class ProposalsTable(Generic[EmbedType], ProposalsTableUtils):
 
         register_vector(self.connection)
 
-    def get_similar(self, request: ProposalRequest[EmbedType], start: int = 0, amount: int = 5) -> List[ProposalRequest[EmbedType]]:
+    def get_similar(self, request: ProposalRequest, start: int = 0, amount: int = 5) -> List[ProposalRequest]:
         embedding = request.embedding
         cursor = self.connection.cursor()
         cursor.execute(

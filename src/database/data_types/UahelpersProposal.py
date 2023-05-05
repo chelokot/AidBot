@@ -11,7 +11,7 @@
 # see <https://www.gnu.org/licenses/>.
 
 from src.database.data_types.ProposalRequest import ProposalRequest
-from typing import Dict, Generic, TypeVar, Optional
+from typing import Dict, Optional
 
 from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
@@ -19,13 +19,12 @@ from src.bot.TelegramBotUtils import TelegramBotUtils
 
 from src.database.data_types.ColumnNames import ColumnNames
 
-EmbedType = TypeVar('EmbedType', bound=Embedding)
 
 
-class UahelpersProposal(Generic[EmbedType], ProposalRequest[EmbedType]):
+class UahelpersProposal(ProposalRequest):
     def __init__(self,
                  characteristics: Dict[str, str],
-                 embedder: Optional[TextEmbedder[EmbedType]],
+                 embedder: Optional[TextEmbedder],
     ):
         self._characteristics = characteristics
         self._embedder = embedder
@@ -81,5 +80,5 @@ class UahelpersProposal(Generic[EmbedType], ProposalRequest[EmbedType]):
         return pretty_text
 
     @property
-    def embedding(self) -> EmbedType:
+    def embedding(self) -> Embedding:
         return self._embedding

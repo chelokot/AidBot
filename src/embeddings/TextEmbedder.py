@@ -11,18 +11,14 @@
 # see <https://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic
-
 from src.embeddings.Embedding import Embedding
 
-T = TypeVar('T', bound=Embedding)
 
-
-class TextEmbedder(Generic[T], ABC):
+class TextEmbedder(ABC):
     @abstractmethod
     def __init__(self):
         pass
 
     @abstractmethod
-    def get_embedding(self, text: str, translate: bool = True) -> T:
+    def get_embedding(self, text: str, translate: bool = True) -> Embedding:
         pass

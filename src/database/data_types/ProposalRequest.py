@@ -10,17 +10,15 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from typing import Generic, TypeVar, Dict, Optional
+from typing import Dict, Optional
 from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
 from abc import ABC, abstractmethod
 
-EmbedType = TypeVar('EmbedType', bound=Embedding)
 
-
-class ProposalRequest(Generic[EmbedType], ABC):
+class ProposalRequest(ABC):
     @abstractmethod
-    def __init__(self, characteristics: Dict[str, str], embedder: TextEmbedder[EmbedType]):
+    def __init__(self, characteristics: Dict[str, str], embedder: TextEmbedder):
         pass
 
     @abstractmethod
@@ -37,7 +35,7 @@ class ProposalRequest(Generic[EmbedType], ABC):
 
     @property
     @abstractmethod
-    def embedding(self) -> EmbedType:
+    def embedding(self) -> Embedding:
         pass
 
 
