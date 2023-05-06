@@ -14,13 +14,14 @@ import telebot
 from src.database.ProposalsTable import ProposalsTable
 from src.database.BotRequestsTable import BotRequestsTable
 from src.bot.TelegramBotUtils import TelegramBotUtils
+from src.database.data_types.ColumnNames import ColumnNames
 
 from src.embeddings.OpenAITextEmbedder import OpenAITextEmbedder
 from src.embeddings.EmbeddingAda1536 import EmbeddingAda1536
 from src.config.OpenAIConfig import openai_api_key
 
 from src.database.data_types.BotRequest import BotRequest
-from src.database.data_types.BotRequest import BOT_REQUEST_MESSAGE_TEXT
+
 
 class AidBot:
     __proposals_table = ProposalsTable()
@@ -57,12 +58,12 @@ class AidBot:
 
                 request = BotRequest(
                     characteristics = {
-                        BOT_REQUEST_MESSAGE_TEXT: user_text
+                        ColumnNames.description: user_text,
+                        ColumnNames.bot_request_answer_message_id: None,
+                        ColumnNames.bot_request_start: str(0),
+                        ColumnNames.bot_request_amount: str(5),
                     },
                     embedder = self.__openai_text_embedder,
-                    answer_message_id = None,
-                    start = 0,
-                    amount = 5,
                 )
 
                 self.bot.send_message(message.chat.id, TelegramBotUtils.get_received_message_text(localization))

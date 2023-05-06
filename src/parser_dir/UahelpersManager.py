@@ -51,7 +51,7 @@ class UahelpersManager:
                     proposal = UahelpersProposal[self.embedding_type](
                         characteristics={
                             ColumnNames.proposal_name:          dict_json['name'],
-                            ColumnNames.proposal_description:   dict_json['description'],
+                            ColumnNames.description:            dict_json['description'],
                             ColumnNames.proposal_contact:       dict_json['contact'],
                             ColumnNames.proposal_comment:       dict_json['comment'],
                             ColumnNames.proposal_location: ', '.join(dict_json['location']),

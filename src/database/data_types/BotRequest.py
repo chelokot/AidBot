@@ -10,48 +10,34 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional
 
-from src.embeddings.Embedding import Embedding
+from src.database.data_types.ColumnNames import ColumnNames
 from src.embeddings.TextEmbedder import TextEmbedder
 from src.database.data_types.ProposalRequest import ProposalRequest
 
-BOT_REQUEST_MESSAGE_TEXT = "message_text"
-
 
 class BotRequest(ProposalRequest):
-    def __init__(self,
-                 characteristics: Dict[str, str],
-                 embedder: TextEmbedder,
-                 answer_message_id: Optional[int],
-                 start: int,
-                 amount: int,
-                 ):
-        self._characteristics = characteristics
-        self._embedder = embedder
-        self._start = start
-        self._amount = amount
-        self._answer_message_id = answer_message_id
-        self._embedding = self._embedder.get_embedding(self.get_full_text())
+    @staticmethod
+    def get_list_of_columns() -> List[str]:
+        return [
+            ColumnNames.description, ColumnNames.bot_request_start, ColumnNames.bot_request_amount,
+            ColumnNames.bot_request_answer_message_id
+        ]
 
-    def get_characteristic(self, characteristic: str) -> Optional[str]:
-        return self._characteristics.get(characteristic, None)
+    def __init__(self, characteristics: Dict[str, str], embedder: Optional[TextEmbedder]):
+        super().__init__(characteristics, embedder)
+        self.start = int(self._characteristics[ColumnNames.bot_request_start])
+        self.amount = int(self._characteristics[ColumnNames.bot_request_amount])
+
+        answer_id = self.get_characteristic(ColumnNames.bot_request_answer_message_id)
+        self.answer_message_id = int(answer_id) if answer_id is not None else None
+        self.embedding = self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None
+
 
     def get_full_text(self) -> str:
-        message_text = self.get_characteristic(BOT_REQUEST_MESSAGE_TEXT)
+        message_text = self.get_characteristic(ColumnNames.description)
         if message_text is None:
             return ""
         return message_text
 
-    def get_pretty_text(self) -> str:
-        return self.get_full_text()
-
-    def get_start_and_amount(self) -> Tuple[int, int]:
-        return self._start, self._amount
-
-    def get_answer_message_id(self) -> Optional[int]:
-        return self._answer_message_id
-
-    @property
-    def embedding(self) -> Embedding:
-        return self._embedding

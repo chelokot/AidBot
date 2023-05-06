@@ -17,15 +17,12 @@ from pgvector.psycopg import register_vector
 
 from typing import List
 from src.database.data_types.ProposalRequest import ProposalRequest
-from src.database.data_types.UahelpersProposal import UahelpersProposal
 from src.database.data_types.ColumnNames import ColumnNames
-
-from src.database.utils.ProposalsTableUtils import ProposalsTableUtils
 
 import psycopg
 
 
-class ProposalsTable(ProposalsTableUtils):
+class ProposalsTable():
     __conn = DatabaseConnection()
 
     def __init__(self):
@@ -33,7 +30,7 @@ class ProposalsTable(ProposalsTableUtils):
 
     def add(self, proposal: ProposalRequest):
         cursor = self.connection.cursor()
-        query  = self._get_insert_query(proposal)
+        query  = proposal.get_insertion_query(site_table_name)
         try:
             cursor.execute(query)
             cursor.close()
@@ -51,7 +48,7 @@ class ProposalsTable(ProposalsTableUtils):
         """
         self.connection.execute('CREATE EXTENSION IF NOT EXISTS vector')
         proposal_string_columns = [
-            f"{column_name} varchar({ColumnNames.length[column_name]})" for column_name in ColumnNames.proposal_string_columns_names
+            f"{column_name} varchar({ColumnNames.length[column_name]})" for column_name in ColumnNames.all_proposal_string_columns_names
         ]
         self.connection.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} 
@@ -67,7 +64,10 @@ class ProposalsTable(ProposalsTableUtils):
         embedding = request.embedding
         cursor = self.connection.cursor()
         cursor.execute(
-            f"""SELECT {self._format_string_column_names()} FROM {site_table_name} ORDER BY embedding <-> %s LIMIT %s OFFSET %s""",
+            f"""SELECT {', '.join(ColumnNames.all_proposal_string_columns_names)}
+            FROM {site_table_name} 
+            ORDER BY embedding <-> %s 
+            LIMIT %s OFFSET %s""",
             (str(embedding.get_list()), amount, start)
         )
 
@@ -76,8 +76,8 @@ class ProposalsTable(ProposalsTableUtils):
         proposals = []
         for result in results:
             proposals.append(
-                UahelpersProposal(
-                    characteristics = dict(zip(ColumnNames.proposal_string_columns_names, result[0])),
+                ProposalRequest(
+                    characteristics = dict(zip(ColumnNames.all_proposal_string_columns_names, result)),
                     embedder = None
                 )
             )

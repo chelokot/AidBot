@@ -15,7 +15,7 @@ class ColumnNames:
     id                   = "id"
 
     proposal_name        = "name"
-    proposal_description = "description"
+    description          = "description"
     proposal_contact     = "contact"
     proposal_comment     = "comment"
     proposal_location    = "location"
@@ -23,17 +23,29 @@ class ColumnNames:
     proposal_date_time   = "date_time"
     proposal_embedding   = "embedding"
 
-    proposal_string_columns_names = [
-        proposal_name, proposal_description, proposal_contact, proposal_comment, proposal_location,
+    bot_request_start    = "start"
+    bot_request_amount   = "amount"
+    bot_request_answer_message_id = "answer_message_id"
+
+    all_proposal_string_columns_names = [
+        proposal_name, description, proposal_contact, proposal_comment, proposal_location,
         proposal_services, proposal_date_time
+    ]
+
+    all_bot_request_string_columns_names = [
+        description, bot_request_start, bot_request_amount, bot_request_answer_message_id
     ]
 
     length = {
         proposal_name: 300,
-        proposal_description: 2000,
+        description: 2000,
         proposal_contact: 300,
         proposal_comment: 2000,
         proposal_location: 300,
         proposal_services: 2000,
         proposal_date_time: 300,
+
+        bot_request_start: 5, #FIXME: Better think how to remake this whole thing and use int instead of string
+        bot_request_amount: 5,
+        bot_request_answer_message_id: 20,
     }

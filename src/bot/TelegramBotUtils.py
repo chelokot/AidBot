@@ -76,14 +76,18 @@ class TelegramBotUtils:
 
     @staticmethod
     def date_time_to_pretty_text(date_time: str, localization: str) -> str:
-        original_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
-        date_time = datetime.datetime.strptime(date_time, original_date_format) # type: datetime.datetime
-        date_format = '%d-%m-%Y'
-        if localization == 'ru':
-            return f'Дата: {date_time.strftime(date_format)}'
-        elif localization == 'en':
-            return f'Date: {date_time.strftime(date_format)}'
-        elif localization == 'ua':
-            return f'Дата {date_time.strftime(date_format)}'
-        else:
-            return f'{date_time.strftime(date_format)}'
+        try:
+            original_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
+            date_time = datetime.datetime.strptime(date_time, original_date_format) # type: datetime.datetime
+            date_format = '%d-%m-%Y'
+            if localization == 'ru':
+                return f'Дата: {date_time.strftime(date_format)}'
+            elif localization == 'en':
+                return f'Date: {date_time.strftime(date_format)}'
+            elif localization == 'ua':
+                return f'Дата {date_time.strftime(date_format)}'
+            else:
+                return f'{date_time.strftime(date_format)}'
+        except Exception as e:
+            print(e, date_time)
+            return date_time
