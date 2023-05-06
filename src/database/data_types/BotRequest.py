@@ -19,7 +19,7 @@ from src.database.data_types.ProposalRequest import ProposalRequest
 
 class BotRequest(ProposalRequest):
     @staticmethod
-    def get_list_of_columns() -> List[str]:
+    def get_list_of_string_columns() -> List[str]:
         return [
             ColumnNames.description, ColumnNames.bot_request_start, ColumnNames.bot_request_amount,
             ColumnNames.bot_request_answer_message_id

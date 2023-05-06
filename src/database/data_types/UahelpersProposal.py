@@ -27,7 +27,7 @@ class UahelpersProposal(ProposalRequest):
         self.embedding = self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None
 
     @staticmethod
-    def get_list_of_columns() -> List[str]:
+    def get_list_of_string_columns() -> List[str]:
         return [
             ColumnNames.proposal_name, ColumnNames.description, ColumnNames.proposal_contact,
             ColumnNames.proposal_comment, ColumnNames.proposal_location, ColumnNames.proposal_services,

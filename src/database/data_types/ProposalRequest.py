@@ -20,7 +20,7 @@ from abc import ABC, abstractmethod
 class ProposalRequest:
     @staticmethod
     @abstractmethod
-    def get_list_of_columns() -> List[str]:
+    def get_list_of_string_columns() -> List[str]:
         """
         Proposals and requests that we will get from different sources (uahelpers, other sites, directly from bot, etc.)
         will have different available info, so some columns will be empty.
@@ -42,42 +42,18 @@ class ProposalRequest:
     def get_full_text(self) -> str:
         pass
 
-    def get_pretty_text(self, localization: str) -> str:
-        name = self.get_characteristic(ColumnNames.proposal_name)
-        description = self.get_characteristic(ColumnNames.description)
-        contact = self.get_characteristic(ColumnNames.proposal_contact)
-        comment = self.get_characteristic(ColumnNames.proposal_comment)
-        location = self.get_characteristic(ColumnNames.proposal_location)
-        services = self.get_characteristic(ColumnNames.proposal_services)
-        date_time = self.get_characteristic(ColumnNames.proposal_date_time)
-        pretty_text = ""
-        if name is not None:
-            pretty_text += name + "\n"
-        if description is not None:
-            pretty_text += description + "\n"
-        if contact is not None:
-            pretty_text += contact + " | "
-        if location is not None:
-            pretty_text += location
-        pretty_text += "\n"
-        if comment is not None:
-            pretty_text += comment + " | "
-        if services is not None:
-            pretty_text += services
-        pretty_text += "\n"
-        if date_time is not None:
-            from src.bot.TelegramBotUtils import TelegramBotUtils
-            pretty_text += TelegramBotUtils.date_time_to_pretty_text(date_time, localization)
-        return pretty_text
-
     def get_insertion_query(self, table_name: str) -> str:
-        columns = self.get_list_of_columns()
+        # First, we get list of columns that are just strings and their corresponding values
+        columns = self.get_list_of_string_columns()
         values = [self.get_characteristic(column) for column in columns]
 
+        # Then, we get embedding
         columns.append(ColumnNames.proposal_embedding)
         values.append(str(self.embedding.get_list()))
+        # And format all values with quotes '
         values = [f"'{value}'" if value is not None else "NULL" for value in values]
 
+        # Finally, we add ID column and its value
         columns.append(ColumnNames.id)
         values.insert(0, "DEFAULT")
 
