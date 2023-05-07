@@ -45,16 +45,10 @@ class AidBot:
 
             @self.bot.message_handler(content_types=['text'])
             def get_user_text(message):
-                user_text = message.text # type: str
-                user_id = message.from_user.id # type: int
-                localization = message.from_user.language_code # type: str
+                user_text = message.text  # type: str
+                localization = message.from_user.language_code  # type: str
 
                 # TODO: insert user details into database
-                # user_embedding = embedding.get_embedding(user_text)
-                # user_details = [user_text, user_id, f"{user_embedding}", 0, 5]
-                # user_details = ", ".join([f"'{value}'" for value in user_details])
-                #
-                # database.insert_data_from_user(user_details)
 
                 request = BotRequest(
                     characteristics = {
@@ -82,8 +76,6 @@ class AidBot:
                 )
 
                 # TODO: insert reply details into database
-                # we want to save message_id to access user request later if they click on "Next" or "Previous"
-                # database.insert_reply_message_id(api_reply.message_id, user_text, user_id)
 
     def start(self):
         self.bot.polling()

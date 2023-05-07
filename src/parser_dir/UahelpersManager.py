@@ -2,6 +2,7 @@
 # Copyright (C) 2023
 # Anastasia Mayorova aka EternityRei  <anastasiamayorova2003@gmail.com>
 #    Andrey Vlasenko aka    chelokot   <andrey.vlasenko.work@gmail.com>
+from typing import Type
 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
 # License as published by the Free Software Foundation, either version 3 of the License, or any later version. This
@@ -23,11 +24,11 @@ from src.database.data_types.ColumnNames import ColumnNames
 
 
 class UahelpersManager:
-    def __init__(self, table_name, openai_api_key, embedding_type):
+    def __init__(self, table_name: str, openai_api_key: str, embedding_type: Type):
         self.db = ProposalsTable()
         self.db.create_table_or_add_columns(table_name)
         self.embedding_type = embedding_type
-        self.ai = OpenAITextEmbedder[embedding_type](openai_api_key)
+        self.ai = OpenAITextEmbedder(openai_api_key, embedding_type)
     
     def parse(self):
         has_more = True
@@ -48,7 +49,7 @@ class UahelpersManager:
                     proposition_json = json.dumps(proposition)
                     dict_json = json.loads(proposition_json)
 
-                    proposal = UahelpersProposal[self.embedding_type](
+                    proposal = UahelpersProposal(
                         characteristics={
                             ColumnNames.proposal_name:          dict_json['name'],
                             ColumnNames.description:            dict_json['description'],
@@ -67,6 +68,3 @@ class UahelpersManager:
                     print(e)
                     continue
             skip_value += len(result)
-
-
-

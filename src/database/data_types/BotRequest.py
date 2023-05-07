@@ -21,8 +21,8 @@ class BotRequest(ProposalRequest):
     @staticmethod
     def get_list_of_string_columns() -> List[str]:
         return [
-            ColumnNames.description, ColumnNames.bot_request_start, ColumnNames.bot_request_amount,
-            ColumnNames.bot_request_answer_message_id
+            ColumnNames.description,
+            ColumnNames.bot_request_start, ColumnNames.bot_request_amount, ColumnNames.bot_request_answer_message_id
         ]
 
     def __init__(self, characteristics: Dict[str, str], embedder: Optional[TextEmbedder]):
@@ -33,7 +33,6 @@ class BotRequest(ProposalRequest):
         answer_id = self.get_characteristic(ColumnNames.bot_request_answer_message_id)
         self.answer_message_id = int(answer_id) if answer_id is not None else None
         self.embedding = self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None
-
 
     def get_full_text(self) -> str:
         message_text = self.get_characteristic(ColumnNames.description)

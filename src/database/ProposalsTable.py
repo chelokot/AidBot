@@ -22,7 +22,7 @@ from src.database.data_types.ColumnNames import ColumnNames
 import psycopg
 
 
-class ProposalsTable():
+class ProposalsTable:
     __conn = DatabaseConnection()
 
     def __init__(self):
@@ -83,7 +83,3 @@ class ProposalsTable():
             )
 
         return proposals
-
-    # def __del__(self):
-    #     del self.connection
-
