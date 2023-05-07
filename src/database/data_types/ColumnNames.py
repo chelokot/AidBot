@@ -23,6 +23,7 @@ class ColumnNames:
     proposal_date_time   = "date_time"
     proposal_embedding   = "embedding"
 
+    bot_request_user_id  = "user_id"
     bot_request_start    = "start"
     bot_request_amount   = "amount"
     bot_request_answer_message_id = "answer_message_id"
@@ -33,19 +34,20 @@ class ColumnNames:
     ]
 
     all_bot_request_string_columns_names = [
-        description, bot_request_start, bot_request_amount, bot_request_answer_message_id
+        description, bot_request_user_id, bot_request_start, bot_request_amount, bot_request_answer_message_id
     ]
 
-    types = {
-        proposal_name:      "varchar(300)",
-        description:        "varchar(2000)",
-        proposal_contact:   "varchar(300)",
-        proposal_comment:   "varchar(2000)",
-        proposal_location:  "varchar(300)",
-        proposal_services:  "varchar(2000)",
-        proposal_date_time: "varchar(300)",
+    length = {
+        proposal_name: 300,
+        description: 2000,
+        proposal_contact: 300,
+        proposal_comment: 2000,
+        proposal_location: 300,
+        proposal_services: 2000,
+        proposal_date_time: 300,
 
-        bot_request_start:  "integer",
-        bot_request_amount: "integer",
-        bot_request_answer_message_id: "bigint",
+        bot_request_start: 5, #FIXME: Better think how to remake this whole thing and use int instead of string
+        bot_request_amount: 5,
+        bot_request_answer_message_id: 20,
+        bot_request_user_id: 1,
     }
