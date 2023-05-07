@@ -26,6 +26,3 @@ class BotRequestsTable(ProposalsRequestsTable):
         self.connection = self.__conn.get_instance().conn   # type: psycopg.connection.Connection
         self.all_string_columns_names = ColumnNames.all_bot_request_string_columns_names
         self.table_name = user_table_name
-
-    def add(self, request: BotRequest):
-        super().add(request)

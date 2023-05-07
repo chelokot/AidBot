@@ -40,3 +40,5 @@ class BotRequest(ProposalRequest):
             return ""
         return message_text
 
+    def get_request_for_user(self, ):
+
