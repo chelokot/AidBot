@@ -11,7 +11,7 @@
 # see <https://www.gnu.org/licenses/>.
 
 from src.database.data_types.ProposalRequest import ProposalRequest
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 
 from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
@@ -22,7 +22,7 @@ from src.database.data_types.ColumnNames import ColumnNames
 
 class UahelpersProposal(ProposalRequest):
 
-    def __init__(self, characteristics: Dict[str, str], embedder: Optional[TextEmbedder]):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder]):
         super().__init__(characteristics, embedder)
         self.embedding = self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None
 

@@ -10,7 +10,7 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 
 from src.database.data_types.ColumnNames import ColumnNames
 from src.embeddings.TextEmbedder import TextEmbedder
@@ -30,12 +30,12 @@ class ProposalRequest:
         """
         pass
 
-    def __init__(self, characteristics: Dict[str, str], embedder: Optional[TextEmbedder]):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder]):
         self.embedding = None
         self._characteristics = characteristics
         self._embedder = embedder
 
-    def get_characteristic(self, characteristic: str) -> Optional[str]:
+    def get_characteristic(self, characteristic: Any) -> Optional[Any]:
         return self._characteristics.get(characteristic, None)
 
     @abstractmethod

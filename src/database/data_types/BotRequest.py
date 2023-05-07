@@ -10,7 +10,7 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 from src.database.data_types.ColumnNames import ColumnNames
 from src.embeddings.TextEmbedder import TextEmbedder
@@ -25,7 +25,7 @@ class BotRequest(ProposalRequest):
             ColumnNames.bot_request_start, ColumnNames.bot_request_amount, ColumnNames.bot_request_answer_message_id
         ]
 
-    def __init__(self, characteristics: Dict[str, str], embedder: Optional[TextEmbedder]):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder]):
         super().__init__(characteristics, embedder)
         self.start = int(self._characteristics[ColumnNames.bot_request_start])
         self.amount = int(self._characteristics[ColumnNames.bot_request_amount])
