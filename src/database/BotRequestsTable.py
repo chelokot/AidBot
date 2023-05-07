@@ -2,7 +2,6 @@
 # Copyright (C) 2023
 # Anastasia Mayorova aka EternityRei  <anastasiamayorova2003@gmail.com>
 #    Andrey Vlasenko aka    chelokot   <andrey.vlasenko.work@gmail.com>
-import psycopg
 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
 # License as published by the Free Software Foundation, either version 3 of the License, or any later version. This
@@ -11,6 +10,7 @@ import psycopg
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
+import psycopg
 from src.database.DatabaseConnection import DatabaseConnection
 from src.database.ProposalsRequestsTable import ProposalsRequestsTable
 from src.database.data_types.BotRequest import BotRequest
@@ -26,3 +26,13 @@ class BotRequestsTable(ProposalsRequestsTable):
         self.connection = self.__conn.get_instance().conn   # type: psycopg.connection.Connection
         self.all_string_columns_names = ColumnNames.all_bot_request_string_columns_names
         self.table_name = user_table_name
+
+    def add(self, request: BotRequest):
+        super().add(request)
+
+    def get_request_for_user(self, answer_message_id):
+        super().selection_proposal_for_user_request(self.table_name, answer_message_id)
+
+    def update_start(self, start, answer_message_id):
+        super().update_start(self.table_name, start, answer_message_id)
+
