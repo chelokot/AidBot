@@ -50,8 +50,15 @@ class ProposalRequest:
         # Then, we get embedding
         columns.append(ColumnNames.proposal_embedding)
         values.append(str(self.embedding.get_list()))
-        # And format all values with quotes '
-        values = [f"'{value}'" if value is not None else "NULL" for value in values]
+
+        def error(value):
+            raise ValueError(f"Value {value} is not int, float or str")
+
+        # And format all string values with quotes '
+        values = [
+            (f"'{value}'" if type(value) == str else (str(value) if type(value) == int or type(value) == float else error(value)))
+            if value is not None else "NULL" for value in values
+        ]
 
         # Finally, we add ID column and its value
         columns.append(ColumnNames.id)
