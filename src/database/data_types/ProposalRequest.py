@@ -13,6 +13,7 @@
 from typing import Dict, Optional, List, Any
 
 from src.database.data_types.ColumnNames import ColumnNames
+from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
 from abc import ABC, abstractmethod
 
@@ -30,8 +31,8 @@ class ProposalRequest:
         """
         pass
 
-    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder]):
-        self.embedding = None
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder], embedding: Optional[Embedding] = None):
+        self.embedding = embedding
         self._characteristics = characteristics
         self._embedder = embedder
 
