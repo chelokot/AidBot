@@ -13,7 +13,6 @@
 
 from src.database.DatabaseConnection import DatabaseConnection
 from src.config.DatabaseConfig import site_table_name
-from pgvector.psycopg import register_vector
 
 from typing import List
 
@@ -31,6 +30,7 @@ class ProposalsTable(ProposalsRequestsTable):
         super().__init__()
         self.connection = self.__conn.get_instance().conn  # type: psycopg.connection.Connection
         self.all_string_columns_names = ColumnNames.all_proposal_string_columns_names
+        self.table_name = site_table_name
 
     def get_similar(self, request: ProposalRequest, start: int = 0, amount: int = 5) -> List[ProposalRequest]:
         embedding = request.embedding

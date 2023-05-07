@@ -16,7 +16,6 @@ from src.database.ProposalsRequestsTable import ProposalsRequestsTable
 from src.database.data_types.BotRequest import BotRequest
 from src.config.DatabaseConfig import user_table_name
 from src.database.data_types.ColumnNames import ColumnNames
-from pgvector.psycopg import register_vector
 
 
 class BotRequestsTable(ProposalsRequestsTable):
@@ -26,5 +25,7 @@ class BotRequestsTable(ProposalsRequestsTable):
         super().__init__()
         self.connection = self.__conn.get_instance().conn   # type: psycopg.connection.Connection
         self.all_string_columns_names = ColumnNames.all_bot_request_string_columns_names
+        self.table_name = user_table_name
 
-
+    def add(self, request: BotRequest):
+        super().add(request)

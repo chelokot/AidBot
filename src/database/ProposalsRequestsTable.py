@@ -16,7 +16,6 @@ from typing import List
 import psycopg
 from pgvector.psycopg import register_vector
 
-from src.config.DatabaseConfig import site_table_name
 from src.database.data_types.ColumnNames import ColumnNames
 from src.database.data_types.ProposalRequest import ProposalRequest
 
@@ -25,10 +24,11 @@ class ProposalsRequestsTable(ABC):
     def __init__(self):
         self.all_string_columns_names = None # type: List[str]
         self.connection = None # type: psycopg.connection.Connection
+        self.table_name = None # type: str
 
     def add(self, proposal: ProposalRequest):
         cursor = self.connection.cursor()
-        query  = proposal.get_insertion_query(site_table_name)
+        query  = proposal.get_insertion_query(self.table_name)
         try:
             cursor.execute(query)
             cursor.close()
