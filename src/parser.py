@@ -11,6 +11,9 @@
 # see <https://www.gnu.org/licenses/>.
 
 from src.parser_dir.UahelpersManager import UahelpersManager
-from src.database.DatabaseConfig import dbname
+from src.config.DatabaseConfig import site_table_name
+from src.config.OpenAIConfig import openai_api_key
+from src.embeddings.EmbeddingAda1536 import EmbeddingAda1536
 
-manager = UahelpersManager(dbname)
+manager = UahelpersManager(site_table_name, openai_api_key, EmbeddingAda1536)
+manager.parse()

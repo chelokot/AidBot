@@ -1,3 +1,8 @@
 deep-translator==1.10.1
-pytelegrambotapi==3.6.6
-openai==0.27.5
+pytelegrambotapi==4.11.0
+openai[embeddings]==0.27.6
+psycopg[binary,pool]==3.1.9
+pgvector==0.1.6
+lxml==4.9.2
+requests==2.30.0
+beautifulsoup4~=4.12.2

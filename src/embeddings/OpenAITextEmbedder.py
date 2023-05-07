@@ -2,6 +2,7 @@
 # Copyright (C) 2023
 # Anastasia Mayorova aka EternityRei  <anastasiamayorova2003@gmail.com>
 #    Andrey Vlasenko aka    chelokot   <andrey.vlasenko.work@gmail.com>
+from typing import Type
 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
 # License as published by the Free Software Foundation, either version 3 of the License, or any later version. This
@@ -10,8 +11,6 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from typing import Generic, TypeVar
-
 from src.embeddings.TextEmbedder import TextEmbedder
 from src.embeddings.Embedding import Embedding
 from src.embeddings.EmbeddingAda1536 import EmbeddingAda1536
@@ -19,23 +18,19 @@ from src.embeddings.EmbeddingAda1536 import EmbeddingAda1536
 import openai
 from deep_translator import GoogleTranslator
 
-EmbedType = TypeVar('EmbedType', bound=Embedding)
 
-
-class OpenAITextEmbedder(TextEmbedder[EmbedType]):
-    def __init__(self, api_key: str):
+class OpenAITextEmbedder(TextEmbedder):
+    def __init__(self, api_key: str, embedding_type: Type = EmbeddingAda1536):
         self.api_key = api_key
+        self.embedding_type = embedding_type
 
-    def _get_embedding_type(self):
-        return self.__orig_class__.__args__[0]
-
-    def get_embedding(self, text: str, translate: bool = True) -> EmbedType:
-        embedding_type = self._get_embedding_type()
-        if embedding_type == EmbeddingAda1536:
+    def get_embedding(self, text: str, translate: bool = True) -> Embedding:
+        openai.api_key = self.api_key
+        if self.embedding_type == EmbeddingAda1536:
             text = text.replace("\n", " ")
             if translate:
                 text = GoogleTranslator(source='auto', target='en').translate(text)
             embeddings_json = openai.Embedding.create(input=[text], model="text-embedding-ada-002")
-            return EmbeddingAda1536(embeddings_json[0]['embedding'])
+            return EmbeddingAda1536(embeddings_json['data'][0]['embedding'])
         else:
-            raise NotImplementedError(f"Embedding type {embedding_type} is not supported with OpenAI API")
+            raise NotImplementedError(f"Embedding type {self.embedding_type} is not supported with OpenAI API")

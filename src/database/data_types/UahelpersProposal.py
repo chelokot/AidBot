@@ -10,41 +10,36 @@
 # details. You should have received a copy of the GNU General Public License along with this program. If not,
 # see <https://www.gnu.org/licenses/>.
 
-from src.database.data_types import ProposalRequest
-from typing import List, Dict, Generic, TypeVar, Optional, Tuple
+from src.database.data_types.ProposalRequest import ProposalRequest
+from typing import Dict, Optional, List
 
 from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
 from src.bot.TelegramBotUtils import TelegramBotUtils
 
-EmbedType = TypeVar('EmbedType', bound=Embedding)
+from src.database.data_types.ColumnNames import ColumnNames
 
-UAHELPERS_PROPOSAL_NAME        = "name"
-UAHELPERS_PROPOSAL_DESCRIPTION = "description"
-UAHELPERS_PROPOSAL_CONTACT     = "contact"
-UAHELPERS_PROPOSAL_COMMENT     = "comment"
-UAHELPERS_PROPOSAL_LOCATION    = "location"
-UAHELPERS_PROPOSAL_SERVICES    = "services"
-UAHELPERS_PROPOSAL_DATE_TIME   = "date_time"
 
-class UahelpersProposal(Generic[EmbedType], ProposalRequest):
-    def __init__(self,
-                 characteristics: Dict[str, str],
-                 embedder: TextEmbedder[EmbedType],
-    ):
-        self._characteristics = characteristics
-        self._embedder = embedder
-        self._embedding = self._embedder.get_embedding(self.get_full_text())
-    
-    def get_characteristic(self, characteristic: str) -> Optional[str]:
-        return self._characteristics.get(characteristic, None)
+class UahelpersProposal(ProposalRequest):
+
+    def __init__(self, characteristics: Dict[str, str], embedder: Optional[TextEmbedder]):
+        super().__init__(characteristics, embedder)
+        self.embedding = self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None
+
+    @staticmethod
+    def get_list_of_string_columns() -> List[str]:
+        return [
+            ColumnNames.proposal_name, ColumnNames.description, ColumnNames.proposal_contact,
+            ColumnNames.proposal_comment, ColumnNames.proposal_location, ColumnNames.proposal_services,
+            ColumnNames.proposal_date_time
+        ]
 
     def get_full_text(self) -> str:
-        name        = self.get_characteristic(UAHELPERS_PROPOSAL_NAME)
-        description = self.get_characteristic(UAHELPERS_PROPOSAL_DESCRIPTION)
-        comment     = self.get_characteristic(UAHELPERS_PROPOSAL_COMMENT)
-        location    = self.get_characteristic(UAHELPERS_PROPOSAL_LOCATION)
-        services    = self.get_characteristic(UAHELPERS_PROPOSAL_SERVICES)
+        name        = self.get_characteristic(ColumnNames.proposal_name)
+        description = self.get_characteristic(ColumnNames.description)
+        comment     = self.get_characteristic(ColumnNames.proposal_comment)
+        location    = self.get_characteristic(ColumnNames.proposal_location)
+        services    = self.get_characteristic(ColumnNames.proposal_services)
         full_text = ""
         if name is not None:
             full_text += name
@@ -53,33 +48,7 @@ class UahelpersProposal(Generic[EmbedType], ProposalRequest):
         if comment is not None:
             full_text += ", " + comment
         if location is not None:
-            full_text += ", " + location
+            full_text += ", " + location # For now, I add it to embedding, but we should handle it smarter -- compare with user location when possible
         if services is not None:
             full_text += ", " + services
         return full_text
-    
-    def get_pretty_text(self, localization:str) -> str:
-        name        = self.get_characteristic(UAHELPERS_PROPOSAL_NAME)
-        description = self.get_characteristic(UAHELPERS_PROPOSAL_DESCRIPTION)
-        contact     = self.get_characteristic(UAHELPERS_PROPOSAL_CONTACT)
-        comment     = self.get_characteristic(UAHELPERS_PROPOSAL_COMMENT)
-        location    = self.get_characteristic(UAHELPERS_PROPOSAL_LOCATION)
-        services    = self.get_characteristic(UAHELPERS_PROPOSAL_SERVICES)
-        date_time   = self.get_characteristic(UAHELPERS_PROPOSAL_DATE_TIME)
-        pretty_text = ""
-        if name is not None:
-            pretty_text += name + "\n"
-        if description is not None:
-            pretty_text += description + "\n"
-        if contact is not None:
-            pretty_text += contact + " | "
-        if location is not None:
-            pretty_text += location
-        pretty_text += "\n"
-        if comment is not None:
-            pretty_text += comment + " | "
-        if services is not None:
-            pretty_text += services
-        pretty_text += "\n"
-        if date_time is not None:
-            pretty_text += TelegramBotUtils.date_time_to_pretty_text(date_time, localization)

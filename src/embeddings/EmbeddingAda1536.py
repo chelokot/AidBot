@@ -16,9 +16,9 @@ from src.embeddings.Embedding import Embedding
 
 class EmbeddingAda1536(Embedding):
     def __init__(self, list: List[float]):
-        if (len(list) != 1536):
+        if len(list) != 1536:
             raise ValueError("EmbeddingAda1536 must be 1536-dimensional")
-        if (type(list[0]) != float):
+        if type(list[0]) != float:
             raise ValueError("EmbeddingAda1536 must be float")
         self.list = list
 
