@@ -60,7 +60,7 @@ class ProposalsRequestsTable(ABC):
 
         register_vector(self.connection)
 
-    def selection_proposal_for_user_request(self, table_name: str, answer_message_id):
+    def selection_proposal_for_user_request(self, table_name: str, answer_message_id: int):
         cursor = self.connection.cursor()
         query = f"""SELECT ({ColumnNames.proposal_embedding, ColumnNames.bot_request_start, ColumnNames.bot_request_amount}) 
                     FROM {table_name} WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
@@ -73,7 +73,7 @@ class ProposalsRequestsTable(ABC):
         finally:
             cursor.close()
 
-    def update_start(self, table_name: str, start, answer_message_id):
+    def update_start(self, table_name: str, start: int, answer_message_id: int):
         cursor = self.connection.cursor()
         query = f"""UPDATE {table_name} SET {ColumnNames.bot_request_start} = {start} 
                     WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
