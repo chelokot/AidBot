@@ -27,6 +27,7 @@ class ProposalsTable:
 
     def __init__(self):
         self.connection = self.__conn.get_instance().conn  # type: psycopg.connection.Connection
+        self.all_string_columns_names = ColumnNames.all_proposal_string_columns_names
 
     def add(self, proposal: ProposalRequest):
         cursor = self.connection.cursor()
@@ -48,7 +49,7 @@ class ProposalsTable:
         """
         self.connection.execute('CREATE EXTENSION IF NOT EXISTS vector')
         proposal_string_columns = [
-            f"{column_name} {ColumnNames.types[column_name]}" for column_name in ColumnNames.all_proposal_string_columns_names
+            f"{column_name} {ColumnNames.types[column_name]}" for column_name in self.all_string_columns_names
         ]
         self.connection.execute(f"""
             CREATE TABLE IF NOT EXISTS {table_name} 

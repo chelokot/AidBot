@@ -22,6 +22,7 @@ class BotRequestsTable:
 
     def __int__(self):
         self.connection = self.__conn.get_instance().conn   # type: psycopg.connection.Connection
+        self.all_string_columns_names = ColumnNames.all_bot_request_string_columns_names
 
     def add(self, request: BotRequest):
         cursor = self.connection.cursor()
@@ -41,10 +42,7 @@ class BotRequestsTable:
         If table already exists, it adds columns from ColumnNames.request_string_columns and embedding if they do not exist.
         """
         self.connection.execute('CREATE EXTENSION IF NOT EXISTS vector')
-        request_string_columns = [
-            f"{column_name} {ColumnNames.length[column_name]}" for column_name in
-            ColumnNames.all_bot_request_string_columns_names
-        ]
+        request_string_columns = [f"{column_name} {ColumnNames.length[column_name]}" for column_name in self.all_string_columns_names]
         self.connection.execute(f"""
                     CREATE TABLE IF NOT EXISTS {table_name} 
                     (id SERIAL PRIMARY KEY, {", ".join(request_string_columns)}, embedding vector(1536))
