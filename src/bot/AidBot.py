@@ -47,21 +47,17 @@ class AidBot:
             def get_user_text(message):
                 user_text = message.text  # type: str
                 localization = message.from_user.language_code  # type: str
-
-                # TODO: insert user details into database
+                self.bot.send_message(message.chat.id, TelegramBotUtils.get_received_message_text(localization))
 
                 request = BotRequest(
-                    characteristics = {
+                    characteristics={
                         ColumnNames.description: user_text,
                         ColumnNames.bot_request_answer_message_id: None,
                         ColumnNames.bot_request_start: 0,
                         ColumnNames.bot_request_amount: 5,
                     },
-                    embedder = self.__openai_text_embedder,
+                    embedder=self.__openai_text_embedder,
                 )
-
-                self.bot.send_message(message.chat.id, TelegramBotUtils.get_received_message_text(localization))
-
                 result = TelegramBotUtils.format_proposal_results(
                     proposals = self.__proposals_table.get_similar(request),
                     localization = localization,
@@ -75,7 +71,53 @@ class AidBot:
                     reply_markup=buttons, parse_mode='html'
                 )
 
-                # TODO: insert reply details into database
+                request = BotRequest(
+                    characteristics = {
+                        ColumnNames.description: user_text,
+                        ColumnNames.bot_request_user_id: message.from_user.id,
+                        ColumnNames.bot_request_answer_message_id: api_reply.message_id,
+                        ColumnNames.bot_request_start: 0,
+                        ColumnNames.bot_request_amount: 5,
+                    },
+                    embedder = self.__openai_text_embedder,
+                    embedding = request.embedding,
+                )
+                self.__bot_requests_table.add(request)
+
+            @self.bot.callback_query_handler(func=lambda call: True)
+            def callback_inline(call):
+                if call.message:
+                    localization = call.from_user.language_code
+                    if call.data == 'next' or call.data == 'previous':
+                        request: BotRequest = self.__bot_requests_table.get_request(
+                            reply_message_id = call.message.message_id
+                        )
+                        start = request.get_characteristic(ColumnNames.bot_request_start)
+                        amount = request.get_characteristic(ColumnNames.bot_request_amount)
+                        if call.data == 'next':
+                            start += amount
+                        else:
+                            start = max(0, start - amount)
+                        buttons = TelegramBotUtils.get_next_and_previous_buttons(localization, start)
+                        new_result = TelegramBotUtils.format_proposal_results(
+                            proposals = self.__proposals_table.get_similar(request, start = start, amount = amount),
+                            localization = localization,
+                        )
+                        self.bot.edit_message_text(
+                            chat_id=call.message.chat.id,
+                            message_id=call.message.message_id,
+                            text=new_result[:4000],
+                        )
+                        self.__bot_requests_table.update_start_and_amount(
+                            reply_message_id = call.message.message_id,
+                            start = start,
+                            amount = amount,
+                        )
+                        self.bot.edit_message_reply_markup(
+                            chat_id = call.message.chat.id,
+                            message_id = call.message.message_id,
+                            reply_markup = buttons
+                        )
 
     def start(self):
         self.bot.polling()
