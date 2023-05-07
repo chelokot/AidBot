@@ -36,16 +36,16 @@ class ColumnNames:
         description, bot_request_start, bot_request_amount, bot_request_answer_message_id
     ]
 
-    length = {
-        proposal_name: 300,
-        description: 2000,
-        proposal_contact: 300,
-        proposal_comment: 2000,
-        proposal_location: 300,
-        proposal_services: 2000,
-        proposal_date_time: 300,
+    types = {
+        proposal_name:      "varchar(300)",
+        description:        "varchar(2000)",
+        proposal_contact:   "varchar(300)",
+        proposal_comment:   "varchar(2000)",
+        proposal_location:  "varchar(300)",
+        proposal_services:  "varchar(2000)",
+        proposal_date_time: "varchar(300)",
 
-        bot_request_start: 5, #FIXME: Better think how to remake this whole thing and use int instead of string
-        bot_request_amount: 5,
-        bot_request_answer_message_id: 20,
+        bot_request_start:  "integer",
+        bot_request_amount: "integer",
+        bot_request_answer_message_id: "bigint",
     }

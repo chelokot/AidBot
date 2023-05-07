@@ -54,8 +54,8 @@ class AidBot:
                     characteristics = {
                         ColumnNames.description: user_text,
                         ColumnNames.bot_request_answer_message_id: None,
-                        ColumnNames.bot_request_start: str(0),
-                        ColumnNames.bot_request_amount: str(5),
+                        ColumnNames.bot_request_start: 0,
+                        ColumnNames.bot_request_amount: 5,
                     },
                     embedder = self.__openai_text_embedder,
                 )
