@@ -16,10 +16,11 @@ from src.database.ProposalsRequestsTable import ProposalsRequestsTable
 from src.database.data_types.BotRequest import BotRequest
 from src.config.DatabaseConfig import user_table_name
 from src.database.data_types.ColumnNames import ColumnNames
+from src.embeddings.EmbeddingAda1536 import EmbeddingAda1536
 
 
 class BotRequestsTable(ProposalsRequestsTable):
-    __conn = DatabaseConnection()
+    __conn = DatabaseConnection.get_instance()
 
     def __init__(self):
         super().__init__()
@@ -30,13 +31,15 @@ class BotRequestsTable(ProposalsRequestsTable):
     def add(self, request: BotRequest):
         super().add(request)
 
-    def get_request(self, table_name: str, answer_message_id: int) -> BotRequest:
+    def get_request(self, answer_message_id: int, user_id: int) -> BotRequest:
         cursor = self.connection.cursor()
         query = f"""SELECT ({", ".join(ColumnNames.all_bot_request_string_columns_names)}, {ColumnNames.proposal_embedding})
-                    FROM {table_name}
-                    WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
-        results = cursor.execute(query).fetchone()
-        embedding = results[-1]
+                    FROM {self.table_name}
+                    WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'
+                    AND {ColumnNames.bot_request_user_id} = '{user_id}'"""
+        results = cursor.execute(query).fetchone()[0]
+        embedding_string = results[-1]
+        embedding = EmbeddingAda1536([float(x) for x in embedding_string[1:-1].split(',')])
         user_proposal = BotRequest(
             characteristics=dict(zip(ColumnNames.all_bot_request_string_columns_names, results[:-1])),
             embedder=None,
@@ -44,10 +47,11 @@ class BotRequestsTable(ProposalsRequestsTable):
         )
         return user_proposal
 
-    def update_start(self, table_name: str, start: int, answer_message_id: int):
+    def update_start(self, start: int, answer_message_id: int, user_id: int):
         cursor = self.connection.cursor()
-        query = f"""UPDATE {table_name} SET {ColumnNames.bot_request_start} = {start} 
-                    WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
+        query = f"""UPDATE {self.table_name} SET {ColumnNames.bot_request_start} = {start} 
+                    WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}' 
+                    AND {ColumnNames.bot_request_user_id} = '{user_id}'"""
         try:
             cursor.execute(query)
             cursor.close()

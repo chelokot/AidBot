@@ -29,11 +29,7 @@ class UahelpersProposal(ProposalRequest):
 
     @staticmethod
     def get_list_of_string_columns() -> List[str]:
-        return [
-            ColumnNames.proposal_name, ColumnNames.description, ColumnNames.proposal_contact,
-            ColumnNames.proposal_comment, ColumnNames.proposal_location, ColumnNames.proposal_services,
-            ColumnNames.proposal_date_time
-        ]
+        return ColumnNames.all_proposal_string_columns_names
 
     def get_full_text(self) -> str:
         name        = self.get_characteristic(ColumnNames.proposal_name)

@@ -21,10 +21,7 @@ from src.database.data_types.ProposalRequest import ProposalRequest
 class BotRequest(ProposalRequest):
     @staticmethod
     def get_list_of_string_columns() -> List[str]:
-        return [
-            ColumnNames.description,
-            ColumnNames.bot_request_start, ColumnNames.bot_request_amount, ColumnNames.bot_request_answer_message_id
-        ]
+        return ColumnNames.all_bot_request_string_columns_names
 
     def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder], embedding: Optional[Embedding] = None):
         super().__init__(characteristics, embedder)

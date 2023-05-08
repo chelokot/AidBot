@@ -19,13 +19,17 @@ from src.database.data_types.ColumnNames import ColumnNames
 from src.embeddings.OpenAITextEmbedder import OpenAITextEmbedder
 from src.embeddings.EmbeddingAda1536 import EmbeddingAda1536
 from src.config.OpenAIConfig import openai_api_key
+from src.config.DatabaseConfig import site_table_name, user_table_name
 
 from src.database.data_types.BotRequest import BotRequest
 
 
 class AidBot:
     __proposals_table = ProposalsTable()
+    __proposals_table.create_table_or_add_columns(site_table_name)
     __bot_requests_table = BotRequestsTable()
+    __bot_requests_table.create_table_or_add_columns(user_table_name)
+
     __openai_text_embedder = OpenAITextEmbedder(openai_api_key, EmbeddingAda1536)
     __telebot = None
 
@@ -90,10 +94,11 @@ class AidBot:
                     localization = call.from_user.language_code
                     if call.data == 'next' or call.data == 'previous':
                         request: BotRequest = self.__bot_requests_table.get_request(
-                            reply_message_id = call.message.message_id
+                            answer_message_id = call.message.message_id,
+                            user_id = call.from_user.id,
                         )
-                        start = request.get_characteristic(ColumnNames.bot_request_start)
-                        amount = request.get_characteristic(ColumnNames.bot_request_amount)
+                        start = int(request.get_characteristic(ColumnNames.bot_request_start))
+                        amount = int(request.get_characteristic(ColumnNames.bot_request_amount))
                         if call.data == 'next':
                             start += amount
                         else:
@@ -108,10 +113,10 @@ class AidBot:
                             message_id=call.message.message_id,
                             text=new_result[:4000],
                         )
-                        self.__bot_requests_table.update_start_and_amount(
-                            reply_message_id = call.message.message_id,
+                        self.__bot_requests_table.update_start(
+                            answer_message_id = call.message.message_id,
+                            user_id = call.from_user.id,
                             start = start,
-                            amount = amount,
                         )
                         self.bot.edit_message_reply_markup(
                             chat_id = call.message.chat.id,
