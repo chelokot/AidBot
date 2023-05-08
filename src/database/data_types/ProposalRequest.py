@@ -31,8 +31,7 @@ class ProposalRequest:
         """
         pass
 
-    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder],
-                 embedding: Optional[Embedding] = None):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder], embedding: Optional[Embedding] = None):
         self.embedding = embedding
         self._characteristics = characteristics
         self._embedder = embedder
