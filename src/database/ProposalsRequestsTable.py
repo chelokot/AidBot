@@ -28,9 +28,9 @@ class ProposalsRequestsTable(ABC):
         self.connection = None # type: psycopg.connection.Connection
         self.table_name = None # type: str
 
-    def add(self, req_type: Union[ProposalRequest, BotRequest]):
+    def add(self, proposal: ProposalRequest):
         cursor = self.connection.cursor()
-        query  = req_type.get_insertion_query(self.table_name)
+        query = proposal.get_insertion_query(self.table_name)
         try:
             cursor.execute(query)
             cursor.close()
