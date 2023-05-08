@@ -22,19 +22,14 @@ from src.database.data_types.ColumnNames import ColumnNames
 
 class UahelpersProposal(ProposalRequest):
 
-    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder],
-                 embedding: Optional[Embedding] = None):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder], embedding: Optional[Embedding] = None):
         super().__init__(characteristics, embedder)
         self.embedding = (self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None) \
             if embedding is None else embedding
 
     @staticmethod
     def get_list_of_string_columns() -> List[str]:
-        return [
-            ColumnNames.proposal_name, ColumnNames.description, ColumnNames.proposal_contact,
-            ColumnNames.proposal_comment, ColumnNames.proposal_location, ColumnNames.proposal_services,
-            ColumnNames.proposal_date_time
-        ]
+        return ColumnNames.all_proposal_string_columns_names
 
     def get_full_text(self) -> str:
         name        = self.get_characteristic(ColumnNames.proposal_name)

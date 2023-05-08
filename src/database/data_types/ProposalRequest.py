@@ -31,8 +31,7 @@ class ProposalRequest:
         """
         pass
 
-    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder],
-                 embedding: Optional[Embedding] = None):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder], embedding: Optional[Embedding] = None):
         self.embedding = embedding
         self._characteristics = characteristics
         self._embedder = embedder
@@ -46,7 +45,7 @@ class ProposalRequest:
 
     def get_insertion_query(self, table_name: str) -> str:
         # First, we get list of columns that are just strings and their corresponding values
-        columns = self.get_list_of_string_columns()
+        columns = self.get_list_of_string_columns().copy()
         values = [self.get_characteristic(column) for column in columns]
 
         # Then, we get embedding
@@ -63,7 +62,7 @@ class ProposalRequest:
         ]
 
         # Finally, we add ID column and its value
-        columns.append(ColumnNames.id)
+        columns.insert(0, ColumnNames.id)
         values.insert(0, "DEFAULT")
 
         return f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({', '.join(values)});"
