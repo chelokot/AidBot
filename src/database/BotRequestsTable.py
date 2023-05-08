@@ -37,13 +37,11 @@ class BotRequestsTable(ProposalsRequestsTable):
                     WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
         results = cursor.execute(query).fetchone()
         embedding = results[-1]
-        user_proposal = None
-        for result in results:
-            user_proposal = BotRequest(
-                characteristics=dict(zip(ColumnNames.all_bot_request_string_columns_names, result)),
-                embedder=None,
-                embedding=embedding
-            )
+        user_proposal = BotRequest(
+            characteristics=dict(zip(ColumnNames.all_bot_request_string_columns_names, results)),
+            embedder=None,
+            embedding=embedding
+        )
         return user_proposal
 
     def update_start(self, table_name: str, start: int, answer_message_id: int):
