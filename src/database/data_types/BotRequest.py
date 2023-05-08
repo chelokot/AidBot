@@ -13,6 +13,7 @@
 from typing import Dict, List, Optional, Any
 
 from src.database.data_types.ColumnNames import ColumnNames
+from src.embeddings.Embedding import Embedding
 from src.embeddings.TextEmbedder import TextEmbedder
 from src.database.data_types.ProposalRequest import ProposalRequest
 
@@ -25,20 +26,15 @@ class BotRequest(ProposalRequest):
             ColumnNames.bot_request_start, ColumnNames.bot_request_amount, ColumnNames.bot_request_answer_message_id
         ]
 
-    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder]):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder],
+                 embedding: Optional[Embedding] = None):
         super().__init__(characteristics, embedder)
-        self.start = int(self._characteristics[ColumnNames.bot_request_start])
-        self.amount = int(self._characteristics[ColumnNames.bot_request_amount])
-
-        answer_id = self.get_characteristic(ColumnNames.bot_request_answer_message_id)
-        self.answer_message_id = int(answer_id) if answer_id is not None else None
-        self.embedding = self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None
+        self.embedding = (self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None) \
+            if embedding is None else embedding
 
     def get_full_text(self) -> str:
         message_text = self.get_characteristic(ColumnNames.description)
         if message_text is None:
             return ""
         return message_text
-
-    def get_request_for_user(self, ):
 

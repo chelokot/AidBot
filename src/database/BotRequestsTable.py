@@ -23,16 +23,38 @@ class BotRequestsTable(ProposalsRequestsTable):
 
     def __init__(self):
         super().__init__()
-        self.connection = self.__conn.get_instance().conn   # type: psycopg.connection.Connection
+        self.connection = self.__conn.get_instance().conn  # type: psycopg.connection.Connection
         self.all_string_columns_names = ColumnNames.all_bot_request_string_columns_names
         self.table_name = user_table_name
 
     def add(self, request: BotRequest):
         super().add(request)
 
-    def get_request_for_user(self, answer_message_id):
-        super().selection_proposal_for_user_request(self.table_name, answer_message_id)
+    def get_request(self, table_name: str, answer_message_id: int):
+        cursor = self.connection.cursor()
+        query = f"""SELECT ({", ".join(ColumnNames.all_bot_request_string_columns_names)}, {ColumnNames.proposal_embedding})
+                    FROM {table_name}
+                    WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
+        results = cursor.execute(query).fetchone()
+        embedding = results[-1]
+        user_proposal = None
+        for result in results:
+            user_proposal = BotRequest(
+                characteristics=dict(zip(ColumnNames.all_bot_request_string_columns_names, result)),
+                embedder=None,
+                embedding=embedding
+            )
+        return user_proposal
 
-    def update_start(self, start, answer_message_id):
-        super().update_start(self.table_name, start, answer_message_id)
-
+    def update_start(self, table_name: str, start: int, answer_message_id: int):
+        cursor = self.connection.cursor()
+        query = f"""UPDATE {table_name} SET {ColumnNames.bot_request_start} = {start} 
+                    WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
+        try:
+            cursor.execute(query)
+            cursor.close()
+        except Exception as e:
+            print(query)
+            print(e)
+        finally:
+            cursor.close()

@@ -59,29 +59,3 @@ class ProposalsRequestsTable(ABC):
             self.connection.execute(f'ALTER TABLE {table_name} ADD COLUMN IF NOT EXISTS {proposal_string_column}')
 
         register_vector(self.connection)
-
-    def selection_proposal_for_user_request(self, table_name: str, answer_message_id: int):
-        cursor = self.connection.cursor()
-        query = f"""SELECT ({ColumnNames.proposal_embedding, ColumnNames.bot_request_start, ColumnNames.bot_request_amount}) 
-                    FROM {table_name} WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
-        try:
-            cursor.execute(query)
-            cursor.close()
-        except Exception as e:
-            print(query)
-            print(e)
-        finally:
-            cursor.close()
-
-    def update_start(self, table_name: str, start: int, answer_message_id: int):
-        cursor = self.connection.cursor()
-        query = f"""UPDATE {table_name} SET {ColumnNames.bot_request_start} = {start} 
-                    WHERE {ColumnNames.bot_request_answer_message_id} = '{answer_message_id}'"""
-        try:
-            cursor.execute(query)
-            cursor.close()
-        except Exception as e:
-            print(query)
-            print(e)
-        finally:
-            cursor.close()
