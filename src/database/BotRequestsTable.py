@@ -30,7 +30,7 @@ class BotRequestsTable(ProposalsRequestsTable):
     def add(self, request: BotRequest):
         super().add(request)
 
-    def get_request(self, table_name: str, answer_message_id: int):
+    def get_request(self, table_name: str, answer_message_id: int) -> BotRequest:
         cursor = self.connection.cursor()
         query = f"""SELECT ({", ".join(ColumnNames.all_bot_request_string_columns_names)}, {ColumnNames.proposal_embedding})
                     FROM {table_name}
@@ -38,7 +38,7 @@ class BotRequestsTable(ProposalsRequestsTable):
         results = cursor.execute(query).fetchone()
         embedding = results[-1]
         user_proposal = BotRequest(
-            characteristics=dict(zip(ColumnNames.all_bot_request_string_columns_names, results)),
+            characteristics=dict(zip(ColumnNames.all_bot_request_string_columns_names, results[:-1])),
             embedder=None,
             embedding=embedding
         )
