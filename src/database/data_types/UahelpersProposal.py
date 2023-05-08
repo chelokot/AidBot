@@ -22,9 +22,11 @@ from src.database.data_types.ColumnNames import ColumnNames
 
 class UahelpersProposal(ProposalRequest):
 
-    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder], embedding: Optional[Embedding] = None):
+    def __init__(self, characteristics: Dict[str, Any], embedder: Optional[TextEmbedder],
+                 embedding: Optional[Embedding] = None):
         super().__init__(characteristics, embedder)
-        self.embedding = (self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None) if embedding is None else embedding
+        self.embedding = (self._embedder.get_embedding(self.get_full_text()) if self._embedder is not None else None) \
+            if embedding is None else embedding
 
     @staticmethod
     def get_list_of_string_columns() -> List[str]:

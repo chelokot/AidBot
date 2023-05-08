@@ -18,6 +18,8 @@ from pgvector.psycopg import register_vector
 
 from src.database.data_types.ColumnNames import ColumnNames
 from src.database.data_types.ProposalRequest import ProposalRequest
+from src.database.data_types.BotRequest import BotRequest
+from typing import Union
 
 
 class ProposalsRequestsTable(ABC):
@@ -28,7 +30,7 @@ class ProposalsRequestsTable(ABC):
 
     def add(self, proposal: ProposalRequest):
         cursor = self.connection.cursor()
-        query  = proposal.get_insertion_query(self.table_name)
+        query = proposal.get_insertion_query(self.table_name)
         try:
             cursor.execute(query)
             cursor.close()
