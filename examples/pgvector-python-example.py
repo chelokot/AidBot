@@ -8,7 +8,7 @@
 # You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # import psycopg
-# from pgvector.psycopg import register_vector
+# from pgvector_lib.psycopg import register_vector
 # import numpy as np
 # import config
 #

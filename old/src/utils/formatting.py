@@ -3,9 +3,12 @@
 # Anastasia Mayorova aka EternityRei  <anastasiamayorova2003@gmail.com>
 #    Andrey Vlasenko aka    chelokot   <andrey.vlasenko.work@gmail.com>
 
-# This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, either version 3 of the License, or any later version. This
+# program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details. You should have received a copy of the GNU General Public License along with this program. If not,
+# see <https://www.gnu.org/licenses/>.
 
 import telebot
 
@@ -30,8 +33,8 @@ received = {
 
 def _remove_columns_from_result(proposal):
     # We want to remove id, user_id and embedding from the result tuples
-    proposal = proposal[1:-1] # id and embedding
-    proposal = proposal[:-2] + (proposal[-1],) # user_id
+    proposal = proposal[1:-1]  # id and embedding
+    proposal = proposal[:-2] + (proposal[-1],)  # user_id
     return proposal
 
 
@@ -47,13 +50,14 @@ def format_proposal(proposal):
 Date: {proposal[6][:10]}
 """
 
+
 def format_search_result(result):
     proposals = [_remove_columns_from_result(proposal) for proposal in result]
     proposals = sort_by_date(proposals)
     return "\n".join([format_proposal(proposal) for proposal in proposals])
 
 
-def get_next_and_previous_buttons(localization, start = 0):
+def get_next_and_previous_buttons(localization, start=0):
     next_text = {
         'ru': 'Далее',
         'en': 'Next',
@@ -65,7 +69,7 @@ def get_next_and_previous_buttons(localization, start = 0):
         'ua': 'Назад',
     }[localization]
     buttons = telebot.types.InlineKeyboardMarkup()
-    if(start != 0):
+    if (start != 0):
         buttons.add(telebot.types.InlineKeyboardButton(text=previous_text, callback_data='previous'),
                     telebot.types.InlineKeyboardButton(text=next_text, callback_data='next')
                     )
